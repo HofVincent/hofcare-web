@@ -7,10 +7,36 @@
   <meta name="description" content="HofCare Capital trae la metodología de los mejores family offices a patrimonios de €500K a €10M. Sin conflictos de interés. Sin productos propios. Solo estructura, disciplina y claridad." />
   <meta name="theme-color" content="#0B1F3A" />
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230B1F3A'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Georgia%2Cserif' font-size='13' font-weight='700' fill='white'%3EHC%3C/text%3E%3C/svg%3E" />
+
   <!-- Open Graph -->
   <meta property="og:title" content="HofCare Capital — Arquitectura Patrimonial Independiente" />
-  <meta property="og:description" content="La disciplina de los grandes family offices, al alcance de quien la merece." />
+  <meta property="og:description" content="La disciplina de los grandes family offices, al alcance de quien la merece. Consultoría patrimonial independiente para patrimonios de €500K a €10M." />
   <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&q=80" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="es_ES" />
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FinancialService",
+    "name": "HofCare Capital",
+    "description": "Consultoría patrimonial independiente. Arquitectura patrimonial para familias con patrimonio entre €500K y €10M. Sin conflictos de interés, sin productos propios.",
+    "url": "https://hofcare-web.vercel.app",
+    "email": "hola@hofcapital.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Madrid",
+      "addressCountry": "ES"
+    },
+    "areaServed": "ES",
+    "serviceType": ["Consultoría patrimonial", "Investment Policy Statement", "Wealth Snapshot", "Portfolio X-Ray", "Asesoramiento independiente"]
+  }
+  </script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,10 +112,9 @@
     </div>
   </div>
 
-  <div class="hero__scroll" aria-hidden="true">
-    <div class="hero__scroll-line"></div>
-    <span>Scroll</span>
-  </div>
+  <svg class="hero__scroll-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="6 9 12 15 18 9"/>
+  </svg>
 </section>
 
 
@@ -165,7 +190,7 @@
   <div class="container">
     <p class="section__label animate-up">La solución</p>
     <h2 class="section__title animate-up delay-1">
-      HofCare Capital.<br/>La arquitectura patrimonial que faltaba.
+      HofCare Capital. <br/>La arquitectura patrimonial que faltaba.
     </h2>
     <p class="section__subtitle animate-up delay-2">
       Tres pilares que definen cómo trabajamos.
@@ -220,7 +245,7 @@
   <div class="container">
     <p class="section__label animate-up">Servicios</p>
     <h2 class="section__title animate-up delay-1">
-      Empieza donde estás.<br/>Llega donde quieres estar.
+      Empieza donde estás. <br/>Llega donde quieres estar.
     </h2>
     <p class="section__subtitle animate-up delay-2">
       Desde el diagnóstico inicial hasta el seguimiento continuo.
@@ -234,7 +259,7 @@
         <p class="svc-card__desc">Diagnóstico patrimonial completo. Tu foto financiera real: activos, pasivos, concentraciones y flujos de caja en un único documento.</p>
         <div class="svc-card__footer">
           <span class="svc-card__price">Desde 500 €</span>
-          <a href="servicios.html#wealth-snapshot" class="svc-card__link">Ver más <span>→</span></a>
+          <a href="servicios.html#wealth-snapshot" class="svc-card__link" aria-label="Ver más sobre Wealth Snapshot">Ver más <span>→</span></a>
         </div>
       </div>
 
@@ -244,7 +269,7 @@
         <p class="svc-card__desc">Tu política de inversión por escrito. El documento que ancla cada decisión a un razonamiento acordado — y te protege de las emociones del mercado.</p>
         <div class="svc-card__footer">
           <span class="svc-card__price">1.500 – 5.000 €</span>
-          <a href="servicios.html#ips" class="svc-card__link">Ver más <span>→</span></a>
+          <a href="servicios.html#ips" class="svc-card__link" aria-label="Ver más sobre Investment Policy Statement">Ver más <span>→</span></a>
         </div>
       </div>
 
@@ -254,7 +279,7 @@
         <p class="svc-card__desc">Seguimiento periódico, revisiones trimestrales y disponibilidad para consultas puntuales. Tu copiloto patrimonial, sin gestión discrecional.</p>
         <div class="svc-card__footer">
           <span class="svc-card__price">300 – 2.000 € / mes</span>
-          <a href="servicios.html#suscripcion" class="svc-card__link">Ver más <span>→</span></a>
+          <a href="servicios.html#suscripcion" class="svc-card__link" aria-label="Ver más sobre Suscripción de Asesoramiento">Ver más <span>→</span></a>
         </div>
       </div>
 
@@ -264,7 +289,7 @@
         <p class="svc-card__desc">Herencias, venta de empresa, liquidez empresarial, due diligence de activos alternativos. Análisis en profundidad para situaciones complejas.</p>
         <div class="svc-card__footer">
           <span class="svc-card__price">Desde 3.000 €</span>
-          <a href="servicios.html#proyectos" class="svc-card__link">Ver más <span>→</span></a>
+          <a href="servicios.html#proyectos" class="svc-card__link" aria-label="Ver más sobre Proyectos Especiales">Ver más <span>→</span></a>
         </div>
       </div>
 
