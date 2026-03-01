@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   })(window, "https://app.cal.com/embed/embed.js", "init");
 
-  Cal("init", { origin: "https://cal.com" });
+  Cal("init", { origin: "https://cal.eu" });
 
   Cal("ui", {
     theme: "light",
