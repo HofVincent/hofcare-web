@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HofCare Capital — Opciones de Color</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #F0F0F0; padding: 40px 24px; }
+
+    h1 { text-align: center; font-size: 1rem; font-weight: 600; color: #444; margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase; }
+    .subtitle { text-align: center; font-size: 0.875rem; color: #888; margin-bottom: 48px; }
+
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; max-width: 1100px; margin: 0 auto; }
+
+    .option { border-radius: 16px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
+    .option__label { background: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .option__label h2 { font-size: 0.875rem; font-weight: 700; color: #222; }
+    .option__label span { font-size: 0.75rem; color: #888; }
+
+    /* ── PREVIEW MINI SITE ── */
+    .preview { }
+
+    /* NAV */
+    .p-nav { padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+    .p-logo { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; }
+    .p-nav-links { display: flex; gap: 16px; align-items: center; }
+    .p-nav-links span { font-size: 0.72rem; font-weight: 500; opacity: 0.7; }
+    .p-btn-sm { font-size: 0.7rem; font-weight: 700; padding: 6px 14px; border-radius: 4px; }
+
+    /* HERO */
+    .p-hero { padding: 36px 28px 40px; }
+    .p-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px; opacity: 0.7; }
+    .p-headline { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 800; line-height: 1.2; margin-bottom: 14px; }
+    .p-sub { font-size: 0.78rem; line-height: 1.65; margin-bottom: 22px; opacity: 0.65; max-width: 340px; }
+    .p-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
+    .p-btn { font-size: 0.72rem; font-weight: 700; padding: 9px 18px; border-radius: 4px; border: 2px solid transparent; }
+
+    /* SECTION */
+    .p-section { padding: 28px 28px; }
+    .p-section-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 8px; }
+    .p-section-title { font-size: 1rem; font-weight: 800; margin-bottom: 16px; line-height: 1.25; }
+    .p-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .p-card { border-radius: 6px; padding: 14px; border: 1px solid; }
+    .p-card h4 { font-size: 0.72rem; font-weight: 700; margin-bottom: 6px; }
+    .p-card p { font-size: 0.65rem; line-height: 1.5; opacity: 0.65; }
+
+    /* DIVIDER */
+    .p-div { height: 1px; margin: 0 28px; opacity: 0.12; background: currentColor; }
+
+    /* CTA BANNER */
+    .p-cta-banner { padding: 28px; text-align: center; }
+    .p-cta-banner h3 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+    .p-cta-banner p { font-size: 0.72rem; opacity: 0.6; margin-bottom: 16px; }
+
+    /* ══════════════════════════════════════════
+       PALETTE A — Navy + Blanco puro (Minimal)
+    ══════════════════════════════════════════ */
+    .pal-a { background: #0B1F3A; color: white; }
+    .pal-a .p-nav { background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .pal-a .p-logo { color: white; }
+    .pal-a .p-btn-sm { background: white; color: #0B1F3A; border-radius: 4px; }
+    .pal-a .p-eyebrow { color: rgba(255,255,255,0.5); }
+    .pal-a .p-headline { color: white; }
+    .pal-a .p-section-label { color: rgba(255,255,255,0.45); }
+    .pal-a .p-section-title { color: white; }
+    .pal-a .p-section { background: #132d52; }
+    .pal-a .p-card { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: white; }
+    .pal-a .p-card h4 { color: white; }
+    .pal-a .p-btn-primary { background: white; color: #0B1F3A; border-color: white; }
+    .pal-a .p-btn-secondary { background: transparent; color: white; border-color: rgba(255,255,255,0.35); }
+    .pal-a .p-cta-banner { background: rgba(255,255,255,0.06); }
+    .pal-a .p-cta-banner h3 { color: white; }
+    .pal-a .p-cta-banner-btn { background: white; color: #0B1F3A; border-color: white; }
+
+    /* ══════════════════════════════════════════
+       PALETTE B — Navy + Verde Pizarra
+    ══════════════════════════════════════════ */
+    .pal-b { background: #0B1F3A; color: white; }
+    .pal-b .p-nav { background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .pal-b .p-logo { color: white; }
+    .pal-b .p-btn-sm { background: #1B4332; color: white; }
+    .pal-b .p-eyebrow { color: #4ade80; letter-spacing: 0.18em; }
+    .pal-b .p-headline { color: white; }
+    .pal-b .p-section-label { color: #4ade80; }
+    .pal-b .p-section-title { color: white; }
+    .pal-b .p-section { background: #0f2940; }
+    .pal-b .p-card { background: rgba(27,67,50,0.25); border-color: rgba(27,67,50,0.6); color: white; }
+    .pal-b .p-card h4 { color: #86efac; }
+    .pal-b .p-btn-primary { background: #1B4332; color: white; border-color: #1B4332; }
+    .pal-b .p-btn-secondary { background: transparent; color: white; border-color: rgba(255,255,255,0.3); }
+    .pal-b .p-cta-banner { background: #1B4332; }
+    .pal-b .p-cta-banner h3 { color: white; }
+    .pal-b .p-cta-banner-btn { background: white; color: #1B4332; border-color: white; }
+
+    /* ══════════════════════════════════════════
+       PALETTE C — Gris Pizarra + Azul Acero
+    ══════════════════════════════════════════ */
+    .pal-c { background: #111827; color: white; }
+    .pal-c .p-nav { background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .pal-c .p-logo { color: white; }
+    .pal-c .p-btn-sm { background: #3B82F6; color: white; }
+    .pal-c .p-eyebrow { color: #60a5fa; }
+    .pal-c .p-headline { color: white; }
+    .pal-c .p-section-label { color: #60a5fa; }
+    .pal-c .p-section-title { color: white; }
+    .pal-c .p-section { background: #1a2332; }
+    .pal-c .p-card { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.2); color: white; }
+    .pal-c .p-card h4 { color: #93c5fd; }
+    .pal-c .p-btn-primary { background: #3B82F6; color: white; border-color: #3B82F6; }
+    .pal-c .p-btn-secondary { background: transparent; color: #93c5fd; border-color: rgba(59,130,246,0.4); }
+    .pal-c .p-cta-banner { background: #3B82F6; }
+    .pal-c .p-cta-banner h3 { color: white; }
+    .pal-c .p-cta-banner-btn { background: white; color: #3B82F6; border-color: white; }
+
+    /* ══════════════════════════════════════════
+       PALETTE D — Navy + Slate (sin acento, ultra limpio)
+    ══════════════════════════════════════════ */
+    .pal-d { background: #0B1F3A; color: white; }
+    .pal-d .p-nav { background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .pal-d .p-logo { color: white; }
+    .pal-d .p-btn-sm { background: #E2E8F0; color: #0B1F3A; }
+    .pal-d .p-eyebrow { color: #94a3b8; }
+    .pal-d .p-headline { color: white; }
+    .pal-d .p-section-label { color: #94a3b8; }
+    .pal-d .p-section-title { color: white; }
+    .pal-d .p-section { background: #0f2742; }
+    .pal-d .p-card { background: rgba(148,163,184,0.08); border-color: rgba(148,163,184,0.18); color: white; }
+    .pal-d .p-card h4 { color: #CBD5E1; }
+    .pal-d .p-btn-primary { background: #E2E8F0; color: #0B1F3A; border-color: #E2E8F0; }
+    .pal-d .p-btn-secondary { background: transparent; color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.25); }
+    .pal-d .p-cta-banner { background: rgba(148,163,184,0.1); border-top: 1px solid rgba(148,163,184,0.15); }
+    .pal-d .p-cta-banner h3 { color: white; }
+    .pal-d .p-cta-banner-btn { background: #E2E8F0; color: #0B1F3A; border-color: #E2E8F0; }
+
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>HofCare Capital — Opciones de Paleta</h1>
+<p class="subtitle">Haz clic en la que más te convence y lo aplicamos a toda la web</p>
+
+<div class="grid">
+
+  <!-- ── OPCIÓN A: NAVY + BLANCO PURO ── -->
+  <div class="option">
+    <div class="option__label">
+      <h2>A — Navy + Blanco puro</h2>
+      <span>Minimalista · Institucional</span>
+    </div>
+    <div class="preview pal-a">
+      <nav class="p-nav">
+        <div class="p-logo">HofCare Capital</div>
+        <div class="p-nav-links">
+          <span>Servicios</span><span>Nosotros</span><span>FAQ</span>
+          <div class="p-btn-sm">Consulta gratuita</div>
+        </div>
+      </nav>
+      <div class="p-hero">
+        <p class="p-eyebrow">Arquitectura Patrimonial Independiente</p>
+        <h2 class="p-headline">Tu patrimonio merece la misma disciplina que el de una gran familia.</h2>
+        <p class="p-sub">HofCare Capital trae la metodología de los mejores family offices a patrimonios de €500K a €10M.</p>
+        <div class="p-ctas">
+          <div class="p-btn p-btn-primary">Agenda tu consulta gratuita</div>
+          <div class="p-btn p-btn-secondary">¿Por qué HofCare? →</div>
+        </div>
+      </div>
+      <div class="p-section">
+        <p class="p-section-label">La solución</p>
+        <p class="p-section-title">La arquitectura patrimonial que faltaba.</p>
+        <div class="p-cards">
+          <div class="p-card"><h4>Independencia</h4><p>Sin producto propio. Sin retrocesiones.</p></div>
+          <div class="p-card"><h4>Estructura</h4><p>El marco primero. Siempre.</p></div>
+          <div class="p-card"><h4>Metodología</h4><p>Frameworks de family office.</p></div>
+        </div>
+      </div>
+      <div class="p-cta-banner">
+        <h3>El patrimonio no espera.</h3>
+        <p>30 minutos gratuitos. Sin compromiso.</p>
+        <div class="p-btn p-cta-banner-btn" style="display:inline-block;">Agenda tu consulta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── OPCIÓN B: NAVY + VERDE PIZARRA ── -->
+  <div class="option">
+    <div class="option__label">
+      <h2>B — Navy + Verde institucional</h2>
+      <span>Diferenciador · Estabilidad</span>
+    </div>
+    <div class="preview pal-b">
+      <nav class="p-nav">
+        <div class="p-logo">HofCare Capital</div>
+        <div class="p-nav-links">
+          <span>Servicios</span><span>Nosotros</span><span>FAQ</span>
+          <div class="p-btn-sm">Consulta gratuita</div>
+        </div>
+      </nav>
+      <div class="p-hero">
+        <p class="p-eyebrow">Arquitectura Patrimonial Independiente</p>
+        <h2 class="p-headline">Tu patrimonio merece la misma disciplina que el de una gran familia.</h2>
+        <p class="p-sub">HofCare Capital trae la metodología de los mejores family offices a patrimonios de €500K a €10M.</p>
+        <div class="p-ctas">
+          <div class="p-btn p-btn-primary">Agenda tu consulta gratuita</div>
+          <div class="p-btn p-btn-secondary">¿Por qué HofCare? →</div>
+        </div>
+      </div>
+      <div class="p-section">
+        <p class="p-section-label">La solución</p>
+        <p class="p-section-title">La arquitectura patrimonial que faltaba.</p>
+        <div class="p-cards">
+          <div class="p-card"><h4>Independencia</h4><p>Sin producto propio. Sin retrocesiones.</p></div>
+          <div class="p-card"><h4>Estructura</h4><p>El marco primero. Siempre.</p></div>
+          <div class="p-card"><h4>Metodología</h4><p>Frameworks de family office.</p></div>
+        </div>
+      </div>
+      <div class="p-cta-banner">
+        <h3>El patrimonio no espera.</h3>
+        <p>30 minutos gratuitos. Sin compromiso.</p>
+        <div class="p-btn p-cta-banner-btn" style="display:inline-block;">Agenda tu consulta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── OPCIÓN C: PIZARRA + AZUL ACERO ── -->
+  <div class="option">
+    <div class="option__label">
+      <h2>C — Pizarra + Azul acero</h2>
+      <span>Moderno · Fintech premium</span>
+    </div>
+    <div class="preview pal-c">
+      <nav class="p-nav">
+        <div class="p-logo">HofCare Capital</div>
+        <div class="p-nav-links">
+          <span>Servicios</span><span>Nosotros</span><span>FAQ</span>
+          <div class="p-btn-sm">Consulta gratuita</div>
+        </div>
+      </nav>
+      <div class="p-hero">
+        <p class="p-eyebrow">Arquitectura Patrimonial Independiente</p>
+        <h2 class="p-headline">Tu patrimonio merece la misma disciplina que el de una gran familia.</h2>
+        <p class="p-sub">HofCare Capital trae la metodología de los mejores family offices a patrimonios de €500K a €10M.</p>
+        <div class="p-ctas">
+          <div class="p-btn p-btn-primary">Agenda tu consulta gratuita</div>
+          <div class="p-btn p-btn-secondary">¿Por qué HofCare? →</div>
+        </div>
+      </div>
+      <div class="p-section">
+        <p class="p-section-label">La solución</p>
+        <p class="p-section-title">La arquitectura patrimonial que faltaba.</p>
+        <div class="p-cards">
+          <div class="p-card"><h4>Independencia</h4><p>Sin producto propio. Sin retrocesiones.</p></div>
+          <div class="p-card"><h4>Estructura</h4><p>El marco primero. Siempre.</p></div>
+          <div class="p-card"><h4>Metodología</h4><p>Frameworks de family office.</p></div>
+        </div>
+      </div>
+      <div class="p-cta-banner">
+        <h3>El patrimonio no espera.</h3>
+        <p>30 minutos gratuitos. Sin compromiso.</p>
+        <div class="p-btn p-cta-banner-btn" style="display:inline-block;">Agenda tu consulta</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── OPCIÓN D: NAVY + SLATE NEUTRO ── -->
+  <div class="option">
+    <div class="option__label">
+      <h2>D — Navy + Slate neutro</h2>
+      <span>Ultra limpio · Sin distracción</span>
+    </div>
+    <div class="preview pal-d">
+      <nav class="p-nav">
+        <div class="p-logo">HofCare Capital</div>
+        <div class="p-nav-links">
+          <span>Servicios</span><span>Nosotros</span><span>FAQ</span>
+          <div class="p-btn-sm">Consulta gratuita</div>
+        </div>
+      </nav>
+      <div class="p-hero">
+        <p class="p-eyebrow">Arquitectura Patrimonial Independiente</p>
+        <h2 class="p-headline">Tu patrimonio merece la misma disciplina que el de una gran familia.</h2>
+        <p class="p-sub">HofCare Capital trae la metodología de los mejores family offices a patrimonios de €500K a €10M.</p>
+        <div class="p-ctas">
+          <div class="p-btn p-btn-primary">Agenda tu consulta gratuita</div>
+          <div class="p-btn p-btn-secondary">¿Por qué HofCare? →</div>
+        </div>
+      </div>
+      <div class="p-section">
+        <p class="p-section-label">La solución</p>
+        <p class="p-section-title">La arquitectura patrimonial que faltaba.</p>
+        <div class="p-cards">
+          <div class="p-card"><h4>Independencia</h4><p>Sin producto propio. Sin retrocesiones.</p></div>
+          <div class="p-card"><h4>Estructura</h4><p>El marco primero. Siempre.</p></div>
+          <div class="p-card"><h4>Metodología</h4><p>Frameworks de family office.</p></div>
+        </div>
+      </div>
+      <div class="p-cta-banner">
+        <h3>El patrimonio no espera.</h3>
+        <p>30 minutos gratuitos. Sin compromiso.</p>
+        <div class="p-btn p-cta-banner-btn" style="display:inline-block;">Agenda tu consulta</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
