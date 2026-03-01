@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -49,6 +50,17 @@
 
 <!-- ── HERO ────────────────────────────────────────────────────── -->
 <section class="hero" id="inicio" aria-label="Sección principal">
+
+  <!-- ── VIDEO BACKGROUND ── -->
+  <div class="hero__video-wrap" aria-hidden="true">
+    <video class="hero__video" autoplay muted loop playsinline
+           poster="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=1920&q=80">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4" type="video/mp4">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-sea-waves-with-rocks-on-the-shore-159-large.mp4" type="video/mp4">
+    </video>
+    <div class="hero__overlay"></div>
+  </div>
+
   <div class="container hero__inner">
     <p class="hero__eyebrow">Arquitectura Patrimonial Independiente</p>
 
@@ -81,6 +93,40 @@
     <span>Scroll</span>
   </div>
 </section>
+
+
+<!-- ── STATS BAR ──────────────────────────────────────────────── -->
+<div class="stats-bar" aria-label="Datos clave">
+  <div class="container stats-bar__inner">
+
+    <div class="stat">
+      <span class="stat__num" data-target="500" data-prefix="€" data-suffix="K+">€500K+</span>
+      <span class="stat__label">Patrimonio mínimo</span>
+    </div>
+
+    <div class="stat__divider"></div>
+
+    <div class="stat">
+      <span class="stat__num" data-target="100" data-suffix="%">100%</span>
+      <span class="stat__label">Independiente</span>
+    </div>
+
+    <div class="stat__divider"></div>
+
+    <div class="stat">
+      <span class="stat__num stat__zero">0</span>
+      <span class="stat__label">Productos propios</span>
+    </div>
+
+    <div class="stat__divider"></div>
+
+    <div class="stat">
+      <span class="stat__num" data-target="48" data-suffix="h">48h</span>
+      <span class="stat__label">Primer diagnóstico</span>
+    </div>
+
+  </div>
+</div>
 
 
 <!-- ── PROBLEM ─────────────────────────────────────────────────── -->
