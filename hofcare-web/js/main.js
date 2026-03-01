@@ -78,6 +78,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // ── ANIMATED STATS COUNTER ──────────────────────────────────
+  // Triggers when the stats bar enters the viewport
+  const statNums = document.querySelectorAll('.stat__num[data-target]');
+  if (statNums.length) {
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el     = entry.target;
+        const target = +el.dataset.target;
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const duration = 1200; // ms
+        const step     = 16;   // ~60fps
+        const steps    = Math.round(duration / step);
+        let current    = 0;
+        const inc      = target / steps;
+        const timer = setInterval(() => {
+          current += inc;
+          if (current >= target) {
+            clearInterval(timer);
+            el.textContent = prefix + target + suffix;
+          } else {
+            el.textContent = prefix + Math.round(current) + suffix;
+          }
+        }, step);
+        statsObserver.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+
+    statNums.forEach(el => statsObserver.observe(el));
+  }
+
+
   // ── CAL.COM INTEGRATION ──────────────────────────────────────
   // Cuando configures Cal.com, descomenta y actualiza con tu username:
   //
