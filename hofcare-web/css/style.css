@@ -434,6 +434,17 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
 .cta-banner__sub { font-size: 1rem; color: rgba(255,255,255,0.55); max-width: 500px; margin: 0 auto 40px; line-height: 1.7; }
 .cta-banner__ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
+/* ── SUBSCRIPTION TIERS GRID ───────────────────────────────────── */
+.subs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+@media (max-width: 640px) {
+  .subs-grid { grid-template-columns: 1fr; }
+}
+
 /* ── FULL-PAGE SERVICE BLOCKS ──────────────────────────────────── */
 .service-block { padding: 64px 0; border-bottom: 1px solid var(--border); }
 .service-block:last-child { border-bottom: none; }
