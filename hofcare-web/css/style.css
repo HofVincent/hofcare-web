@@ -486,10 +486,25 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
 .faq-answer__inner { padding: 0 0 24px; font-size: 0.975rem; color: var(--mid); line-height: 1.75; }
 
 /* ── PAGE HERO (inner pages) ───────────────────────────────────── */
-.page-hero { background: var(--navy); padding: 160px 0 80px; }
-.page-hero__eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 16px; }
-.page-hero__title { font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; color: var(--white); margin-bottom: 20px; line-height: 1.15; max-width: 680px; }
-.page-hero__sub { font-size: 1.05rem; color: rgba(255,255,255,0.55); max-width: 560px; line-height: 1.7; }
+.page-hero {
+  background: var(--navy);  /* fallback if video doesn't load */
+  padding: 160px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+/* Content sits above the video */
+.page-hero > .container { position: relative; z-index: 2; }
+/* Darker overlay on inner pages — more text legibility */
+.page-hero .hero__overlay {
+  background: linear-gradient(
+    105deg,
+    rgba(5, 15, 30, 0.96) 0%,
+    rgba(11, 31, 58, 0.93) 100%
+  );
+}
+.page-hero__eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 16px; position: relative; z-index: 2; }
+.page-hero__title { font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; color: var(--white); margin-bottom: 20px; line-height: 1.15; max-width: 680px; position: relative; z-index: 2; }
+.page-hero__sub { font-size: 1.05rem; color: rgba(255,255,255,0.55); max-width: 560px; line-height: 1.7; position: relative; z-index: 2; }
 
 /* ── FOOTER ────────────────────────────────────────────────────── */
 .footer { background: var(--navy-dark); color: rgba(255,255,255,0.5); padding: 64px 0 32px; }
@@ -575,19 +590,24 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
    VIDEO HERO  ·  STATS BAR  ·  Visual Enhancement Layer
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── VIDEO BACKGROUND ───────────────────────────────────────────── */
+/* ── VIDEO BACKGROUND (HTML5 <video>) ───────────────────────────── */
 .hero__video-wrap {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
+  pointer-events: none;
 }
 .hero__video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 55%;
-  transform: scale(1.04); /* prevent edge gaps during scroll */
+  pointer-events: none;
+}
+/* Reduced motion: hide video for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .hero__video { display: none; }
 }
 .hero__overlay {
   position: absolute;
