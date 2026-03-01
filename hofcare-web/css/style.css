@@ -569,3 +569,157 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
   .hero__headline { font-size: 2rem; }
   .service-block__price-box { min-width: unset; width: 100%; }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VIDEO HERO  ·  STATS BAR  ·  Visual Enhancement Layer
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── VIDEO BACKGROUND ───────────────────────────────────────────── */
+.hero__video-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+  transform: scale(1.04); /* prevent edge gaps during scroll */
+}
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  /* Rich navy gradient — darker left (text side) fading right */
+  background:
+    linear-gradient(
+      105deg,
+      rgba(5, 15, 30, 0.93)  0%,
+      rgba(11, 31, 58, 0.80) 55%,
+      rgba(11, 31, 58, 0.52) 100%
+    );
+}
+
+/* Lift decorative rings above the video */
+.hero::before,
+.hero::after  { z-index: 1; }
+.hero__inner  { z-index: 2; }
+.hero__scroll { z-index: 2; }
+
+/* Pause video on mobile (data-saver UX) */
+@media (prefers-reduced-motion: reduce) {
+  .hero__video { display: none; }
+}
+
+
+/* ── STATS BAR ──────────────────────────────────────────────────── */
+.stats-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 48px rgba(11,31,58,0.08);
+  position: relative;
+  z-index: 10;
+}
+.stats-bar__inner {
+  display: flex;
+  align-items: stretch;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 40px;
+  text-align: center;
+  flex: 1;
+  transition: background 0.2s;
+}
+.stat:hover { background: var(--light); }
+
+.stat__num {
+  font-family: var(--font-serif);
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.stat__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.stat__divider {
+  width: 1px;
+  background: var(--border);
+  align-self: stretch;
+  margin: 22px 0;
+  flex-shrink: 0;
+}
+
+/* Stats bar responsive */
+@media (max-width: 768px) {
+  .stats-bar__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .stat__divider { display: none; }
+  .stat {
+    padding: 24px 16px;
+    border: 1px solid var(--border);
+    margin: -1px 0 0 -1px;
+  }
+  .stat__num { font-size: 1.7rem; }
+}
+@media (max-width: 400px) {
+  .stat { padding: 20px 12px; }
+  .stat__num { font-size: 1.5rem; }
+}
+
+
+/* ── HERO HEADLINE VISUAL ENHANCEMENT ──────────────────────────── */
+/* Brighter italic word in headline */
+.hero__headline em {
+  color: rgba(255,255,255,0.88);
+  font-style: italic;
+  position: relative;
+}
+
+/* Subtle animated gradient line under eyebrow */
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: rgba(255,255,255,0.35);
+}
+
+
+/* ── SERVICE CARD HOVER GLOW ────────────────────────────────────── */
+.svc-card:hover {
+  border-color: var(--navy);
+  box-shadow:
+    0 0 0 1px var(--navy),
+    0 16px 48px rgba(11,31,58,0.12);
+}
+
+
+/* ── PILLAR ICON SUBTLE ANIMATION ───────────────────────────────── */
+.pillar:hover .pillar__icon {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(11,31,58,0.18);
+  transition: all 0.3s var(--ease);
+}
+.pillar__icon {
+  transition: all 0.3s var(--ease);
+}
