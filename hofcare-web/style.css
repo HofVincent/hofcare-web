@@ -201,6 +201,10 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
   padding: 9px 20px !important;
   border-radius: var(--radius) !important;
   font-weight: 600 !important;
+  font-family: var(--font-sans) !important;
+  font-size: inherit !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
 }
 .nav__cta:hover { background: rgba(255,255,255,0.2) !important; border-color: rgba(255,255,255,0.5) !important; }
 
