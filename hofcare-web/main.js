@@ -112,16 +112,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ── CONTACT CHOICE MODAL ─────────────────────────────────────
-  // Inject modal HTML once
   const modalHTML = `
-  <div class="contact-modal-backdrop" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+  <div id="contactModal" style="display:none;position:fixed;inset:0;background:rgba(11,31,58,0.72);backdrop-filter:blur(4px);z-index:9000;align-items:center;justify-content:center;padding:24px;" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
     <div class="contact-modal">
       <button class="contact-modal__close" id="contactModalClose" aria-label="Cerrar">&times;</button>
       <h2 class="contact-modal__title" id="contactModalTitle">¿Cómo prefieres empezar?</h2>
       <p class="contact-modal__sub">Sin compromiso. Elige el canal con el que te sientas más cómodo.</p>
       <div class="contact-modal__options">
         <button class="contact-modal__option contact-modal__option--primary"
-                id="modalCalBtn"
                 data-cal-link="hofcarecapital/discovery-call"
                 data-cal-config='{"layout":"popup"}'>
           <span class="contact-modal__option-icon">📅</span>
@@ -138,23 +136,24 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>`;
   document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-  const backdrop   = document.getElementById('contactModal');
-  const closeBtn   = document.getElementById('contactModalClose');
+  const modal  = document.getElementById('contactModal');
+  const closeBtn = document.getElementById('contactModalClose');
 
-  function openContactModal() { backdrop.classList.add('is-open'); }
-  function closeContactModal() { backdrop.classList.remove('is-open'); }
+  function openContactModal()  { modal.style.display = 'flex'; }
+  function closeContactModal() { modal.style.display = 'none'; }
 
-  // Open on all [data-contact-choice] buttons
-  document.querySelectorAll('[data-contact-choice]').forEach(btn => {
-    btn.addEventListener('click', (e) => { e.preventDefault(); openContactModal(); });
+  // Event delegation — captura clicks en todo el documento
+  document.addEventListener('click', function(e) {
+    const trigger = e.target.closest('[data-contact-choice]');
+    if (trigger) { e.preventDefault(); openContactModal(); return; }
+    if (e.target === modal) { closeContactModal(); return; }
+    if (e.target.closest('#contactModalClose')) { closeContactModal(); return; }
   });
 
-  // Close on backdrop click or close button
-  closeBtn.addEventListener('click', closeContactModal);
-  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeContactModal(); });
-
-  // Close on Escape key
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeContactModal(); });
+  // Cerrar con Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeContactModal();
+  });
 
   // ── CAL.COM INTEGRATION ──────────────────────────────────────
   (function (C, A, L) {
