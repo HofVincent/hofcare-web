@@ -111,6 +111,50 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
+  // ── CONTACT CHOICE MODAL ─────────────────────────────────────
+  const modalHTML = `
+  <div id="contactModal" style="display:none;position:fixed;inset:0;background:rgba(11,31,58,0.72);backdrop-filter:blur(4px);z-index:9000;align-items:center;justify-content:center;padding:24px;" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+    <div class="contact-modal">
+      <button class="contact-modal__close" id="contactModalClose" aria-label="Cerrar">&times;</button>
+      <h2 class="contact-modal__title" id="contactModalTitle">¿Cómo prefieres empezar?</h2>
+      <p class="contact-modal__sub">Sin compromiso. Elige el canal con el que te sientas más cómodo.</p>
+      <div class="contact-modal__options">
+        <button class="contact-modal__option contact-modal__option--primary"
+                data-cal-link="hofcarecapital/discovery-call"
+                data-cal-config='{"layout":"popup"}'>
+          <span class="contact-modal__option-icon">📅</span>
+          <span class="contact-modal__option-title">Videollamada</span>
+          <span class="contact-modal__option-desc">Discovery call gratuita · 30 min · Elige día y hora</span>
+        </button>
+        <a class="contact-modal__option" href="mailto:hola@hofcapital.com">
+          <span class="contact-modal__option-icon">✉️</span>
+          <span class="contact-modal__option-title">Email</span>
+          <span class="contact-modal__option-desc">Escríbenos cuando quieras · Respondemos en menos de 24h</span>
+        </a>
+      </div>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  const modal  = document.getElementById('contactModal');
+  const closeBtn = document.getElementById('contactModalClose');
+
+  function openContactModal()  { modal.style.display = 'flex'; }
+  function closeContactModal() { modal.style.display = 'none'; }
+
+  // Event delegation — captura clicks en todo el documento
+  document.addEventListener('click', function(e) {
+    const trigger = e.target.closest('[data-contact-choice]');
+    if (trigger) { e.preventDefault(); openContactModal(); return; }
+    if (e.target === modal) { closeContactModal(); return; }
+    if (e.target.closest('#contactModalClose')) { closeContactModal(); return; }
+  });
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeContactModal();
+  });
+
   // ── CAL.COM INTEGRATION ──────────────────────────────────────
   (function (C, A, L) {
     let p = function (a, ar) { a.q.push(ar); };
