@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 60" fill="none">
+  <!-- HofCare Capital · El Portal · Versión navy sobre blanco -->
+
+  <!-- ── Mark: The Portal ── -->
+  <!-- Left pillar cap -->
+  <rect x="3" y="23" width="14" height="4.5" rx="1.2" fill="#0B1F3A"/>
+  <!-- Left pillar shaft -->
+  <rect x="6" y="26.5" width="8" height="27" rx="1.5" fill="#0B1F3A"/>
+  <!-- Right pillar cap -->
+  <rect x="37" y="23" width="14" height="4.5" rx="1.2" fill="#0B1F3A"/>
+  <!-- Right pillar shaft -->
+  <rect x="40" y="26.5" width="8" height="27" rx="1.5" fill="#0B1F3A"/>
+  <!-- Arch -->
+  <path d="M 10,24.5 A 17,17 0 0 1 44,24.5" stroke="#0B1F3A" stroke-width="3.8" fill="none" stroke-linecap="round"/>
+  <!-- Keystone diamond at apex -->
+  <polygon points="27,4 30.2,9.5 27,15 23.8,9.5" fill="#0B1F3A"/>
+
+  <!-- ── Wordmark ── -->
+  <text x="64" y="34" font-family="Georgia,'Times New Roman',serif" font-size="25" font-weight="700" fill="#0B1F3A" letter-spacing="0.3">HofCare</text>
+  <text x="65.5" y="50" font-family="Georgia,'Times New Roman',serif" font-size="10.5" fill="#5A6A80" letter-spacing="5.8">CAPITAL</text>
+</svg>

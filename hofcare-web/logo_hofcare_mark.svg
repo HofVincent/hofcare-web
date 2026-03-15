@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 56" fill="none">
+  <!-- HofCare Capital · El Portal · Marca aislada (favicon / sello) -->
+
+  <!-- Left pillar cap -->
+  <rect x="2" y="22" width="15" height="5" rx="1.2" fill="#0B1F3A"/>
+  <!-- Left pillar shaft -->
+  <rect x="5.5" y="26" width="8" height="28" rx="1.5" fill="#0B1F3A"/>
+  <!-- Right pillar cap -->
+  <rect x="37" y="22" width="15" height="5" rx="1.2" fill="#0B1F3A"/>
+  <!-- Right pillar shaft -->
+  <rect x="40.5" y="26" width="8" height="28" rx="1.5" fill="#0B1F3A"/>
+  <!-- Arch -->
+  <path d="M 9.5,23.5 A 17.5,17.5 0 0 1 44.5,23.5" stroke="#0B1F3A" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Keystone diamond -->
+  <polygon points="27,3 30.5,9 27,15 23.5,9" fill="#0B1F3A"/>
+</svg>
