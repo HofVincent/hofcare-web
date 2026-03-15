@@ -126,9 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="contact-modal__option-title">Videollamada</span>
           <span class="contact-modal__option-desc">Discovery call gratuita · 30 min · Elige día y hora</span>
         </button>
-        <a class="contact-modal__option" href="mailto:hola@hofcapital.com">
+        <a class="contact-modal__option" href="onboarding.html">
+          <span class="contact-modal__option-icon">📋</span>
+          <span class="contact-modal__option-title">Formulario de onboarding</span>
+          <span class="contact-modal__option-desc">Rellena tu perfil patrimonial · Async · A tu ritmo</span>
+        </a>
+        <a class="contact-modal__option" href="mailto:hofcarecapital@gmail.com">
           <span class="contact-modal__option-icon">✉️</span>
-          <span class="contact-modal__option-title">Email</span>
+          <span class="contact-modal__option-title">Email directo</span>
           <span class="contact-modal__option-desc">Escríbenos cuando quieras · Respondemos en menos de 24h</span>
         </a>
       </div>
