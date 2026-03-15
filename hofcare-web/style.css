@@ -206,6 +206,10 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
 }
 .nav__cta:hover { background: rgba(255,255,255,0.2) !important; border-color: rgba(255,255,255,0.5) !important; }
 
+/* Empezar → link in nav */
+.nav__link--onboarding { color: var(--white) !important; font-weight: 700 !important; font-size: 13px !important; opacity: 0.9; }
+.nav__link--onboarding:hover { opacity: 1 !important; background: rgba(255,255,255,0.08) !important; }
+
 /* Mobile hamburger */
 .nav__hamburger { display: none; flex-direction: column; gap: 5px; padding: 6px; }
 .nav__hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.25s; }
@@ -840,8 +844,11 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
 }
 .contact-modal__options {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 640px) {
+  .contact-modal__options { grid-template-columns: 1fr; }
 }
 .contact-modal__option {
   border: 2px solid var(--border);

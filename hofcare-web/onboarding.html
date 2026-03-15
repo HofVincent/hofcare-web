@@ -1,0 +1,2096 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title id="pageTitle">Formulario de Onboarding · HofCare Capital</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 54 56'%3E%3Crect width='54' height='56' rx='6' fill='%230B1F3A'/%3E%3Crect x='4' y='24' width='13' height='4.5' rx='1.2' fill='white'/%3E%3Crect x='7' y='27.5' width='7' height='24' rx='1.5' fill='white'/%3E%3Crect x='37' y='24' width='13' height='4.5' rx='1.2' fill='white'/%3E%3Crect x='40' y='27.5' width='7' height='24' rx='1.5' fill='white'/%3E%3Cpath d='M10.5 25.5 A16.5 16.5 0 0 1 43.5 25.5' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3Cpolygon points='27,5 30,10 27,15 24,10' fill='white'/%3E%3C/svg%3E"/>
+<style>
+:root{
+  --navy:#0B1F3A;--navy-mid:#132d52;--navy-dark:#071428;--navy-light:#EEF2F6;
+  --white:#FFFFFF;--off-white:#F8F9FB;--border:#DDE2E9;--dark:#1A2332;
+  --mid:#5A6A80;--light:#F4F6F9;--green:#1E7F5E;--red:#B83A3A;
+  --radius:12px;--shadow:0 4px 24px rgba(11,31,58,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--light);color:var(--dark);min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+
+/* HEADER */
+.header{background:var(--navy);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.header-logo svg{height:34px;width:auto;display:block}
+.header-right{display:flex;align-items:center;gap:16px}
+.header-badge{font-size:12px;color:rgba(255,255,255,.55);text-align:right;line-height:1.5}
+.header-badge strong{color:rgba(255,255,255,.9);font-weight:600;display:block;font-size:13px}
+
+/* LANG SELECTOR */
+.lang-sel{display:flex;gap:4px}
+.lang-btn{background:none;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.65);font-size:12px;font-weight:700;padding:5px 11px;border-radius:6px;cursor:pointer;font-family:inherit;transition:all .15s;letter-spacing:.5px}
+.lang-btn.active{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.75);color:white}
+.lang-btn:hover:not(.active){border-color:rgba(255,255,255,.55);color:rgba(255,255,255,.85)}
+
+/* AUTOSAVE TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:white;font-size:13px;font-weight:600;padding:10px 18px;border-radius:8px;box-shadow:0 4px 16px rgba(11,31,58,.3);transform:translateY(80px);opacity:0;transition:all .3s ease;z-index:999;display:flex;align-items:center;gap:8px}
+.toast.visible{transform:translateY(0);opacity:1}
+.toast-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0}
+
+/* RESTORE BANNER */
+.restore-banner{background:var(--navy-light);border:1px solid var(--border);border-left:4px solid var(--navy-mid);border-radius:8px;padding:13px 18px;font-size:13px;color:var(--dark);margin-bottom:20px;display:none;align-items:center;justify-content:space-between;gap:12px}
+.restore-banner.visible{display:flex}
+.restore-banner-left{display:flex;align-items:center;gap:10px;font-weight:600}
+.restore-banner-actions{display:flex;gap:8px;flex-shrink:0}
+.btn-restore-yes{background:var(--navy);color:white;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-restore-no{background:none;border:1.5px solid var(--border);color:var(--mid);border-radius:6px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+
+/* PROGRESS */
+.progress-wrap{background:var(--navy-dark);padding:0 32px}
+.progress-steps{display:flex;align-items:stretch;max-width:760px;margin:0 auto}
+.progress-step{flex:1;padding:13px 6px 11px;text-align:center;border-bottom:3px solid transparent;transition:border-color .2s,opacity .2s;opacity:.4;user-select:none}
+.progress-step.active{border-color:var(--white);opacity:1}
+.progress-step.done{border-color:rgba(255,255,255,.35);opacity:.7;cursor:pointer}
+.progress-step .step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.1);color:white;font-size:11px;font-weight:700;margin-bottom:4px}
+.progress-step.done .step-num{background:var(--navy-light);color:var(--navy-dark)}
+.progress-step.active .step-num{background:var(--white);color:var(--navy-dark)}
+.progress-step .step-label{font-size:10px;color:rgba(255,255,255,.65);line-height:1.3;display:block}
+.progress-step.active .step-label{color:white;font-weight:600}
+.progress-bar-track{background:rgba(255,255,255,.08);height:3px;margin:0 32px}
+.progress-bar-fill{height:100%;background:var(--white);transition:width .4s ease}
+
+/* MAIN */
+.main{flex:1;padding:28px 16px 48px;display:flex;flex-direction:column;align-items:center;gap:24px}
+.form-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);width:100%;max-width:760px;overflow:hidden}
+
+/* SECTION HEADER */
+.section-header{padding:26px 36px 18px;border-bottom:1px solid var(--border);background:var(--off-white)}
+.section-tag{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--mid);text-transform:uppercase;margin-bottom:5px}
+.section-title{font-size:21px;font-weight:700;color:var(--navy);line-height:1.3}
+.section-subtitle{font-size:13px;color:var(--mid);margin-top:5px;line-height:1.5}
+
+/* FORM BODY */
+.form-body{padding:28px 36px}
+
+/* FIELD GROUPS */
+.field-group{margin-bottom:26px}
+.field-group-title{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--mid);text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+
+/* LABELS */
+label{display:block;font-size:13px;font-weight:600;color:var(--dark);margin-bottom:6px}
+label .opt{font-weight:400;color:var(--mid);font-size:11px;margin-left:4px}
+label.req::after{content:' *';color:var(--red);font-weight:700}
+
+/* INPUTS */
+input[type="text"],input[type="number"],input[type="email"],select,textarea{
+  width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;
+  font-size:14px;color:var(--dark);background:var(--white);
+  transition:border-color .15s,box-shadow .15s;
+  -webkit-appearance:none;appearance:none;outline:none;font-family:inherit
+}
+input:focus,select:focus,textarea:focus{border-color:var(--navy-mid);box-shadow:0 0 0 3px rgba(19,45,82,.1)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%235A6A80' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:16px;padding-right:34px}
+textarea{resize:vertical;min-height:90px;line-height:1.5}
+
+/* VALIDATION */
+.field-error{border-color:var(--red)!important;box-shadow:0 0 0 3px rgba(184,58,58,.1)!important}
+.err-msg{font-size:12px;color:var(--red);margin-top:5px;display:none;font-weight:500}
+.err-msg.show{display:block}
+
+/* CURRENCY */
+.currency-wrap{position:relative}
+.currency-wrap .currency-sym{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--mid);pointer-events:none}
+.currency-wrap input{padding-left:26px}
+
+/* RANGE */
+.range-wrap{padding-top:4px}
+input[type="range"]{width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--border);outline:none;cursor:pointer;border:none;padding:0;box-shadow:none}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--navy);border:3px solid white;box-shadow:0 2px 6px rgba(11,31,58,.3);cursor:pointer}
+input[type="range"]:focus{box-shadow:none}
+.range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--mid);margin-top:6px}
+.range-value{font-size:14px;font-weight:700;color:var(--navy);margin-top:4px;text-align:center}
+
+/* RISK CARDS */
+.risk-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.risk-card{border:2px solid var(--border);border-radius:10px;padding:16px 14px;cursor:pointer;transition:border-color .2s,background .2s;text-align:center;position:relative}
+.risk-card input[type="radio"]{position:absolute;opacity:0;pointer-events:none}
+.risk-card:hover{border-color:var(--navy-mid);background:var(--off-white)}
+.risk-card.selected{border-color:var(--navy);background:var(--navy-light)}
+.risk-card .risk-icon{font-size:28px;margin-bottom:8px;display:block}
+.risk-card .risk-name{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.risk-card .risk-desc{font-size:11px;color:var(--mid);line-height:1.4}
+.risk-error-msg{font-size:12px;color:var(--red);margin-top:10px;font-weight:500;display:none}
+.risk-error-msg.show{display:block}
+
+/* ASSET ROWS */
+.asset-row{display:grid;grid-template-columns:1fr 155px 125px auto;gap:10px;align-items:center;margin-bottom:10px}
+.asset-row-header{display:grid;grid-template-columns:1fr 155px 125px auto;gap:10px;margin-bottom:6px}
+.asset-row-header span{font-size:11px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:.8px}
+.btn-remove{width:32px;height:32px;border:none;background:none;color:var(--mid);cursor:pointer;font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;flex-shrink:0}
+.btn-remove:hover{background:#fef2f2;color:var(--red)}
+.btn-add-row{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--navy-mid);background:none;border:1.5px dashed var(--border);border-radius:8px;padding:8px 14px;cursor:pointer;transition:border-color .15s,background .15s;margin-top:4px}
+.btn-add-row:hover{border-color:var(--navy-mid);background:var(--off-white)}
+
+/* OBJ TAGS */
+.obj-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.obj-tag{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--white);color:var(--dark);user-select:none}
+.obj-tag input[type="checkbox"]{display:none}
+.obj-tag:hover{border-color:var(--navy-mid);background:var(--off-white)}
+.obj-tag.selected{border-color:var(--navy);background:var(--navy);color:white}
+
+/* INFO / GDPR BOX */
+.info-box{background:var(--navy-light);border:1px solid var(--border);border-left:4px solid var(--navy-mid);border-radius:8px;padding:14px 16px;font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:22px}
+.info-box strong{color:var(--dark)}
+.gdpr-box{background:var(--off-white);border:1.5px solid var(--border);border-radius:10px;padding:18px 20px;margin-top:8px}
+.gdpr-box p{font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:14px}
+.gdpr-check-row{display:flex;align-items:flex-start;gap:12px;cursor:pointer}
+.gdpr-check-row input[type="checkbox"]{width:18px;height:18px;flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:var(--navy)}
+.gdpr-check-row span{font-size:13px;color:var(--dark);line-height:1.5}
+.gdpr-check-row a{color:var(--navy-mid);text-decoration:underline;font-weight:600}
+.gdpr-error{font-size:12px;color:var(--red);margin-top:8px;font-weight:500;display:none}
+.gdpr-error.show{display:block}
+
+/* AUTOSAVE BOX */
+.autosave-box{background:var(--off-white);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+.autosave-check-row{display:flex;align-items:flex-start;gap:12px;cursor:pointer;margin-bottom:6px}
+.autosave-check-row input{width:16px;height:16px;flex-shrink:0;margin-top:2px;cursor:pointer;accent-color:var(--navy-mid)}
+.autosave-check-row span{font-size:13px;color:var(--dark);line-height:1.5}
+.autosave-note{font-size:11px;color:var(--mid);line-height:1.5;margin-top:8px}
+.autosave-footer{display:flex;align-items:center;justify-content:flex-end;margin-top:10px}
+.btn-clear-save{background:none;border:none;font-size:11px;color:var(--red);cursor:pointer;font-family:inherit;font-weight:600;text-decoration:underline;padding:0;display:none}
+.btn-clear-save.visible{display:inline}
+
+/* NAV */
+.form-nav{padding:18px 36px 26px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border)}
+.btn-back{background:none;border:1.5px solid var(--border);color:var(--mid);font-size:14px;font-weight:600;padding:10px 22px;border-radius:8px;cursor:pointer;transition:all .15s;font-family:inherit;display:flex;align-items:center;gap:6px}
+.btn-back:hover{border-color:var(--dark);color:var(--dark)}
+.btn-next{background:var(--navy);color:white;border:none;font-size:14px;font-weight:700;padding:11px 26px;border-radius:8px;cursor:pointer;transition:background .15s;font-family:inherit;display:flex;align-items:center;gap:8px}
+.btn-next:hover{background:var(--navy-mid)}
+.step-counter{font-size:13px;color:var(--mid)}
+
+/* SUMMARY */
+.summary-section{margin-bottom:22px}
+.summary-section-title{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--mid);text-transform:uppercase;margin-bottom:10px}
+.summary-table{width:100%;border-collapse:collapse}
+.summary-table td{padding:9px 0;border-bottom:1px solid var(--border);font-size:14px;vertical-align:top}
+.summary-table td:first-child{color:var(--mid);width:44%;font-size:13px}
+.summary-table td:last-child{font-weight:600;color:var(--dark);padding-left:12px}
+.summary-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.summary-kpi{background:var(--off-white);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.summary-kpi .kpi-label{font-size:11px;color:var(--mid);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.summary-kpi .kpi-value{font-size:20px;font-weight:800;color:var(--navy)}
+.summary-kpi.positive .kpi-value{color:var(--green)}
+.summary-kpi.negative .kpi-value{color:var(--red)}
+.btn-copy-json,.btn-print{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:11px 20px;border-radius:8px;cursor:pointer;border:none;font-family:inherit;transition:all .15s}
+.btn-copy-json{background:var(--navy);color:white}
+.btn-copy-json:hover{background:var(--navy-mid)}
+.btn-print{background:var(--off-white);color:var(--dark);border:1.5px solid var(--border)}
+.btn-print:hover{background:var(--border)}
+.copy-success{background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:13px 18px;font-size:13px;font-weight:600;color:#166534;margin-bottom:16px;display:none;align-items:center;gap:10px}
+.copy-success.visible{display:flex}
+.final-note{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:24px;color:white;text-align:center;margin-top:22px}
+.final-note h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.final-note p{font-size:13px;color:rgba(255,255,255,.7);line-height:1.6}
+
+/* LEGAL SECTION */
+.legal-section{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);width:100%;max-width:760px;padding:28px 36px;scroll-margin-top:24px}
+.legal-section h2{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:18px}
+.legal-section p{font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:10px}
+.legal-section strong{color:var(--dark)}
+.legal-section a{color:var(--navy-mid);text-decoration:underline}
+
+/* STEPS */
+.step{display:none}
+.step.active{display:block}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .header{padding:13px 18px}
+  .progress-wrap,.progress-bar-track{padding:0 14px}
+  .form-body,.section-header,.form-nav{padding-left:18px;padding-right:18px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .asset-row{grid-template-columns:1fr 120px;grid-template-rows:auto auto}
+  .asset-row > *:nth-child(3),.asset-row > *:nth-child(4){display:none}
+  .risk-cards{grid-template-columns:1fr}
+  .summary-kpis{grid-template-columns:1fr 1fr}
+  .progress-step .step-label{display:none}
+  .restore-banner{flex-direction:column;align-items:flex-start}
+  .lang-sel{gap:2px}
+  .lang-btn{padding:4px 8px;font-size:11px}
+}
+
+/* SUBMIT BUTTON */
+.btn-submit{background:var(--green);color:white;border:none;font-size:14px;font-weight:700;padding:11px 24px;border-radius:8px;cursor:pointer;font-family:inherit;transition:background .15s;display:inline-flex;align-items:center;gap:8px}
+.btn-submit:hover{background:#166534}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed}
+
+@media print{
+  .header{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .progress-wrap,.progress-bar-track,.form-nav,.btn-copy-json,.btn-print,.btn-submit,.copy-success,.toast,.restore-banner,.legal-section,#submitArea,#submitSuccess,#submitError{display:none!important}
+  .step{display:block!important}
+  .step:not(#step7){display:none!important}
+  .form-card{box-shadow:none;border:1px solid var(--border)}
+  body{background:white}
+  .final-note{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-dot"></span> <span id="toastMsg">Progreso guardado</span></div>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html" class="header-logo">
+    <svg viewBox="0 0 220 48" height="34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="18" width="12" height="3.5" rx="1" fill="white"/>
+      <rect x="4.5" y="21" width="7" height="22" rx="1.2" fill="white"/>
+      <rect x="30" y="18" width="12" height="3.5" rx="1" fill="white"/>
+      <rect x="32.5" y="21" width="7" height="22" rx="1.2" fill="white"/>
+      <path d="M 8,19 A 14,14 0 0 1 36,19" stroke="white" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+      <polygon points="22,3 24.6,7.5 22,12 19.4,7.5" fill="white"/>
+      <text x="52" y="27" font-family="Georgia,serif" font-size="20" font-weight="700" fill="white">HofCare</text>
+      <text x="53.5" y="40" font-family="Georgia,serif" font-size="9" fill="rgba(255,255,255,0.5)" letter-spacing="5">CAPITAL</text>
+    </svg>
+  </a>
+  <div class="header-right">
+    <div class="lang-sel">
+      <button class="lang-btn active" id="btnLangES" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" id="btnLangEN" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="header-badge">
+      <strong data-i18n="headerBadgeTitle">Formulario Patrimonial</strong>
+      <span data-i18n="headerBadgeSubtitle">Confidencial · Datos protegidos (RGPD)</span>
+    </div>
+  </div>
+</header>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps" id="progressSteps">
+    <div class="progress-step active" data-step="1"><div class="step-num">1</div><span class="step-label" data-i18n-html="sl1">Datos<br>personales</span></div>
+    <div class="progress-step" data-step="2"><div class="step-num">2</div><span class="step-label" data-i18n-html="sl2">Activos</span></div>
+    <div class="progress-step" data-step="3"><div class="step-num">3</div><span class="step-label" data-i18n-html="sl3">Pasivos</span></div>
+    <div class="progress-step" data-step="4"><div class="step-num">4</div><span class="step-label" data-i18n-html="sl4">Flujos</span></div>
+    <div class="progress-step" data-step="5"><div class="step-num">5</div><span class="step-label" data-i18n-html="sl5">Objetivos</span></div>
+    <div class="progress-step" data-step="6"><div class="step-num">6</div><span class="step-label" data-i18n-html="sl6">Perfil<br>riesgo</span></div>
+    <div class="progress-step" data-step="7"><div class="step-num">7</div><span class="step-label" data-i18n-html="sl7">Resumen</span></div>
+  </div>
+</div>
+<div class="progress-bar-track"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+
+<!-- MAIN -->
+<main class="main">
+<div class="form-card">
+
+<!-- ═══ STEP 1: DATOS PERSONALES ═══ -->
+<div class="step active" id="step1">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="s1tag">PASO 1 DE 7</div>
+    <div class="section-title" data-i18n="s1title">Datos personales</div>
+    <div class="section-subtitle" data-i18n="s1sub">Información básica para personalizar su análisis. Los campos marcados con * son obligatorios.</div>
+  </div>
+  <div class="form-body">
+
+    <!-- RESTORE BANNER -->
+    <div id="restoreBanner" class="restore-banner">
+      <div class="restore-banner-left">💾 <span data-i18n="restoreMsg">Tiene un formulario guardado. ¿Desea recuperarlo?</span></div>
+      <div class="restore-banner-actions">
+        <button class="btn-restore-yes" onclick="restoreProgress()" data-i18n="restoreYes">Sí, recuperar</button>
+        <button class="btn-restore-no" onclick="dismissRestore()" data-i18n="restoreNo">No, empezar de cero</button>
+      </div>
+    </div>
+
+    <div class="info-box" data-i18n-html="infoBox">
+      🔒 <strong>Confidencialidad garantizada.</strong> Sus datos se usan exclusivamente para elaborar su análisis patrimonial y no se comparten con terceros. Consulte nuestra <a href="#info-legal">política de privacidad</a> para más información.
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_id">Identificación</div>
+      <div class="grid-2">
+        <div>
+          <label class="req" for="nombre" data-i18n="lNombre">Nombre completo</label>
+          <input type="text" id="nombre" data-i18n-ph="phNombre" placeholder="Ej. María García López"/>
+          <div class="err-msg" id="err-nombre" data-i18n="errNombre">Este campo es obligatorio</div>
+        </div>
+        <div>
+          <label class="req" for="email" data-i18n="lEmail">Correo electrónico</label>
+          <input type="email" id="email" data-i18n-ph="phEmail" placeholder="nombre@email.com"/>
+          <div class="err-msg" id="err-email" data-i18n="errEmail">Introduce un email válido</div>
+        </div>
+        <div>
+          <label class="req" for="edad" data-i18n="lEdad">Edad</label>
+          <input type="number" id="edad" data-i18n-ph="phEdad" placeholder="Ej. 42" min="18" max="99"/>
+          <div class="err-msg" id="err-edad" data-i18n="errEdad">La edad debe estar entre 18 y 99 años</div>
+        </div>
+        <div>
+          <label class="req" for="pais" data-i18n="lPais">País de residencia</label>
+          <select id="pais">
+            <option value=""></option>
+          </select>
+          <div class="err-msg" id="err-pais" data-i18n="errPais">Selecciona tu país de residencia</div>
+        </div>
+        <div>
+          <label class="req" for="estadoCivil" data-i18n="lEstadoCivil">Estado civil</label>
+          <select id="estadoCivil" data-i18n-sel="optsEstadoCivil">
+            <option value=""></option>
+          </select>
+          <div class="err-msg" id="err-estadoCivil" data-i18n="errEstadoCivil">Selecciona tu estado civil</div>
+        </div>
+        <div>
+          <label for="hijos"><span data-i18n="lHijos">Hijos a cargo</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <select id="hijos" data-i18n-sel="optsHijos">
+            <option value="0"></option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_prof">Situación profesional</div>
+      <div class="grid-2">
+        <div>
+          <label class="req" for="situacionLaboral" data-i18n="lSituacionLaboral">Situación laboral</label>
+          <select id="situacionLaboral" data-i18n-sel="optsSituacionLaboral">
+            <option value=""></option>
+          </select>
+          <div class="err-msg" id="err-situacionLaboral" data-i18n="errSituacionLaboral">Selecciona tu situación laboral</div>
+        </div>
+        <div>
+          <label for="sector"><span data-i18n="lSector">Sector profesional</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <input type="text" id="sector" data-i18n-ph="phSector" placeholder="Ej. Tecnología, Sanidad, Finanzas..."/>
+        </div>
+        <div class="full">
+          <label for="comoConocio"><span data-i18n="lComoConocio">¿Cómo conoció HofCare Capital?</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <select id="comoConocio" data-i18n-sel="optsComoConocio">
+            <option value=""></option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_gdpr">Protección de datos (RGPD)</div>
+      <div class="gdpr-box">
+        <p data-i18n-html="gdprText">HofCare Capital trata sus datos personales con el único fin de elaborar su análisis patrimonial personalizado, de conformidad con el Reglamento General de Protección de Datos (RGPD – UE 2016/679). Tiene derecho de acceso, rectificación, supresión y portabilidad de sus datos en cualquier momento.</p>
+        <label class="gdpr-check-row" for="gdprConsent">
+          <input type="checkbox" id="gdprConsent"/>
+          <span data-i18n-html="gdprCheckLabel">He leído y acepto la <a href="#info-legal">Política de Privacidad</a> de HofCare Capital y consiento el tratamiento de mis datos personales para la elaboración de mi análisis patrimonial.</span>
+        </label>
+        <div class="gdpr-error" id="err-gdpr" data-i18n="gdprError">Debes aceptar la política de privacidad para continuar</div>
+      </div>
+    </div>
+
+    <div class="field-group" style="margin-bottom:0">
+      <div class="field-group-title" data-i18n="fg_autosave">Guardado de progreso</div>
+      <div class="autosave-box">
+        <label class="autosave-check-row" for="autosaveConsent">
+          <input type="checkbox" id="autosaveConsent" onchange="onAutosaveConsentChange()"/>
+          <span data-i18n="autosaveLabel">Guardar mi progreso automáticamente en este navegador</span>
+        </label>
+        <p class="autosave-note" data-i18n="autosaveNote">Los datos se almacenan únicamente en su navegador (localStorage) y no se transmiten a ningún servidor. Puede borrarlos en cualquier momento.</p>
+        <div class="autosave-footer">
+          <button class="btn-clear-save" id="btnClearSave" onclick="clearSaved()" data-i18n="autosaveClear">Borrar progreso guardado</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-nav">
+    <div class="step-counter" data-i18n="sc1">Paso 1 de 7</div>
+    <button class="btn-next" onclick="nextStep(1)"><span data-i18n="btnContinuar">Continuar</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══ STEP 2: ACTIVOS ═══ -->
+<div class="step" id="step2">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="s2tag">PASO 2 DE 7</div>
+    <div class="section-title" data-i18n="s2title">Activos patrimoniales</div>
+    <div class="section-subtitle" data-i18n="s2sub">Valor aproximado de mercado de todos sus activos. Las cifras pueden ser estimadas — no se requiere exactitud contable.</div>
+  </div>
+  <div class="form-body">
+    <div class="field-group">
+      <div class="field-group-title"><span data-i18n="fg_inmuebles">Inmuebles</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px" data-i18n="optif">(opcional)</span></div>
+      <div class="asset-row-header">
+        <span data-i18n="rhDesc">Descripción</span>
+        <span data-i18n="rhValor">Valor mercado (€)</span>
+        <span data-i18n="rhCat">Categoría</span>
+        <span></span>
+      </div>
+      <div id="inmuebles-rows">
+        <div class="asset-row">
+          <input type="text" data-i18n-ph="phInmuebleDesc" placeholder="Ej. Vivienda habitual Madrid" class="asset-desc"/>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" placeholder="0" class="asset-valor"/></div>
+          <select class="asset-cat"></select>
+          <button class="btn-remove" onclick="removeRow(this)" title="Eliminar fila">×</button>
+        </div>
+      </div>
+      <button class="btn-add-row" onclick="addRow('inmuebles-rows','inmueble')" data-i18n="addInmueble">+ Añadir inmueble</button>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title"><span data-i18n="fg_financiero">Activos financieros</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px" data-i18n="optif">(opcional)</span></div>
+      <div class="asset-row-header">
+        <span data-i18n="rhDesc">Descripción</span>
+        <span data-i18n="rhValorFin">Valor (€)</span>
+        <span data-i18n="rhTipo">Tipo</span>
+        <span></span>
+      </div>
+      <div id="financiero-rows">
+        <div class="asset-row">
+          <input type="text" data-i18n-ph="phFinancieroDesc" placeholder="Ej. Cartera de fondos ING" class="asset-desc"/>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" placeholder="0" class="asset-valor"/></div>
+          <select class="asset-cat"></select>
+          <button class="btn-remove" onclick="removeRow(this)" title="Eliminar fila">×</button>
+        </div>
+      </div>
+      <button class="btn-add-row" onclick="addRow('financiero-rows','financiero')" data-i18n="addFinanciero">+ Añadir activo financiero</button>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title"><span data-i18n="fg_efectivo">Efectivo y liquidez</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px" data-i18n="optif">(opcional)</span></div>
+      <div class="grid-2">
+        <div>
+          <label for="efectivo" data-i18n="lEfectivo">Saldo en cuentas corrientes y ahorro</label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="efectivo" placeholder="0"/></div>
+        </div>
+        <div>
+          <label for="otrosLiquidos"><span data-i18n="lOtrosLiquidos">Otros activos líquidos</span> <span class="opt" data-i18n="optEst">(seguros, etc.)</span></label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="otrosLiquidos" placeholder="0"/></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title"><span data-i18n="fg_otrosActivos">Otros activos</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px" data-i18n="optif">(opcional)</span></div>
+      <div class="grid-2">
+        <div>
+          <label for="negocio" data-i18n="lNegocio">Negocio propio — valor estimado</label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="negocio" placeholder="0"/></div>
+        </div>
+        <div>
+          <label for="vehiculos" data-i18n="lVehiculos">Vehículos y otros activos</label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="vehiculos" placeholder="0"/></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-nav">
+    <button class="btn-back" onclick="prevStep(2)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg> <span data-i18n="btnAnterior">Anterior</span></button>
+    <div class="step-counter" data-i18n="sc2">Paso 2 de 7</div>
+    <button class="btn-next" onclick="nextStep(2)"><span data-i18n="btnContinuar">Continuar</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══ STEP 3: PASIVOS ═══ -->
+<div class="step" id="step3">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="s3tag">PASO 3 DE 7</div>
+    <div class="section-title" data-i18n="s3title">Pasivos y deudas</div>
+    <div class="section-subtitle" data-i18n="s3sub">Capital pendiente de todas sus deudas. Si no tiene deudas, puede continuar directamente.</div>
+  </div>
+  <div class="form-body">
+    <div class="field-group">
+      <div class="field-group-title"><span data-i18n="fg_hipotecas">Hipotecas</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px" data-i18n="optif">(opcional)</span></div>
+      <div class="asset-row-header">
+        <span data-i18n="rhDesc">Descripción</span>
+        <span data-i18n="rhValorPendiente">Capital pendiente (€)</span>
+        <span data-i18n="rhTipo">Tipo</span>
+        <span></span>
+      </div>
+      <div id="hipoteca-rows">
+        <div class="asset-row">
+          <input type="text" data-i18n-ph="phHipotecaDesc" placeholder="Ej. Hipoteca vivienda habitual" class="asset-desc"/>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" placeholder="0" class="asset-valor"/></div>
+          <select class="asset-cat"></select>
+          <button class="btn-remove" onclick="removeRow(this)" title="Eliminar fila">×</button>
+        </div>
+      </div>
+      <button class="btn-add-row" onclick="addRow('hipoteca-rows','hipoteca')" data-i18n="addHipoteca">+ Añadir hipoteca</button>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title"><span data-i18n="fg_prestamos">Préstamos y otras deudas</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px" data-i18n="optif">(opcional)</span></div>
+      <div class="asset-row-header">
+        <span data-i18n="rhDesc">Descripción</span>
+        <span data-i18n="rhValorPendiente">Capital pendiente (€)</span>
+        <span data-i18n="rhTipo">Tipo</span>
+        <span></span>
+      </div>
+      <div id="prestamo-rows">
+        <div class="asset-row">
+          <input type="text" data-i18n-ph="phPrestamoDesc" placeholder="Ej. Préstamo coche" class="asset-desc"/>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" placeholder="0" class="asset-valor"/></div>
+          <select class="asset-cat"></select>
+          <button class="btn-remove" onclick="removeRow(this)" title="Eliminar fila">×</button>
+        </div>
+      </div>
+      <button class="btn-add-row" onclick="addRow('prestamo-rows','prestamo')" data-i18n="addPrestamo">+ Añadir deuda</button>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title"><span data-i18n="fg_avales">Avales y garantías</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px" data-i18n="optif">(opcional)</span></div>
+      <label for="avales" data-i18n="lAvales">¿Tiene avales o garantías sobre deudas de terceros?</label>
+      <textarea id="avales" data-i18n-ph="phAvales" placeholder="Describa brevemente si ha avalado préstamos de terceros o tiene compromisos fuera de balance..."></textarea>
+    </div>
+  </div>
+  <div class="form-nav">
+    <button class="btn-back" onclick="prevStep(3)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg> <span data-i18n="btnAnterior">Anterior</span></button>
+    <div class="step-counter" data-i18n="sc3">Paso 3 de 7</div>
+    <button class="btn-next" onclick="nextStep(3)"><span data-i18n="btnContinuar">Continuar</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══ STEP 4: FLUJOS ═══ -->
+<div class="step" id="step4">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="s4tag">PASO 4 DE 7</div>
+    <div class="section-title" data-i18n="s4title">Ingresos y gastos</div>
+    <div class="section-subtitle" data-i18n="s4sub">Importes mensuales netos. Puede introducir 0 si una categoría no aplica a su situación.</div>
+  </div>
+  <div class="form-body">
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_ingresos">Ingresos mensuales netos</div>
+      <div class="grid-2">
+        <div>
+          <label class="req" for="salario" data-i18n="lSalario">Salario / nómina neta</label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="salario" placeholder="0"/></div>
+          <div class="err-msg" id="err-salario" data-i18n="errSalario">Indica tu salario neto (puede ser 0)</div>
+        </div>
+        <div>
+          <label for="rentas"><span data-i18n="lRentas">Rentas de alquiler netas</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="rentas" placeholder="0"/></div>
+        </div>
+        <div>
+          <label for="dividendos"><span data-i18n="lDividendos">Dividendos e intereses netos</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="dividendos" placeholder="0"/></div>
+        </div>
+        <div>
+          <label for="otrosIngresos"><span data-i18n="lOtrosIngresos">Otros ingresos recurrentes</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="otrosIngresos" placeholder="0"/></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title"><span data-i18n="fg_gastosFijos">Gastos mensuales fijos</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px" data-i18n="optEstim">(estimado si aplica)</span></div>
+      <div class="grid-2">
+        <div>
+          <label for="cuotaHipoteca" data-i18n="lCuotaHipoteca">Cuota hipoteca mensual total</label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="cuotaHipoteca" placeholder="0"/></div>
+        </div>
+        <div>
+          <label for="cuotaPrestamos" data-i18n="lCuotaPrestamos">Cuota préstamos mensual total</label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="cuotaPrestamos" placeholder="0"/></div>
+        </div>
+        <div>
+          <label for="alquilerGasto"><span data-i18n="lAlquilerGasto">Alquiler</span> <span class="opt" data-i18n="optEst">(si no tiene hipoteca)</span></label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="alquilerGasto" placeholder="0"/></div>
+        </div>
+        <div>
+          <label for="seguros" data-i18n="lSeguros">Seguros vida, salud y hogar</label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="seguros" placeholder="0"/></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_gastosVar">Gastos variables estimados</div>
+      <div class="grid-2">
+        <div>
+          <label class="req" for="manutención" data-i18n="lManutención">Manutención y gastos del hogar</label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="manutención" placeholder="0"/></div>
+          <div class="err-msg" id="err-manutención" data-i18n="errManutención">Indica el gasto mensual en manutención (puede ser 0)</div>
+        </div>
+        <div>
+          <label for="ocio"><span data-i18n="lOcio">Ocio, viajes y educación</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="ocio" placeholder="0"/></div>
+        </div>
+        <div>
+          <label for="otrosGastos"><span data-i18n="lOtrosGastos">Otros gastos</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="otrosGastos" placeholder="0"/></div>
+        </div>
+        <div>
+          <label for="ahorroMensual"><span data-i18n="lAhorroMensual">Ahorro mensual actual</span> <span class="opt" data-i18n="optEstim">(estimado)</span></label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="ahorroMensual" placeholder="0"/></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title"><span data-i18n="fg_eventosLiq">Eventos de liquidez futuros</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px" data-i18n="optif">(opcional)</span></div>
+      <label for="eventosLiquidez" data-i18n="lEventosLiquidez">¿Espera recibir o desembolsar sumas importantes en los próximos 10 años?</label>
+      <textarea id="eventosLiquidez" data-i18n-ph="phEventosLiquidez" placeholder="Ej. Herencia estimada ~200.000€ en 5 años. Venta de empresa prevista 2028. Compra segunda vivienda 2026..."></textarea>
+    </div>
+  </div>
+  <div class="form-nav">
+    <button class="btn-back" onclick="prevStep(4)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg> <span data-i18n="btnAnterior">Anterior</span></button>
+    <div class="step-counter" data-i18n="sc4">Paso 4 de 7</div>
+    <button class="btn-next" onclick="nextStep(4)"><span data-i18n="btnContinuar">Continuar</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══ STEP 5: OBJETIVOS ═══ -->
+<div class="step" id="step5">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="s5tag">PASO 5 DE 7</div>
+    <div class="section-title" data-i18n="s5title">Objetivos y horizonte</div>
+    <div class="section-subtitle" data-i18n="s5sub">Cuéntenos hacia dónde quiere llegar. Esto orienta todo nuestro análisis.</div>
+  </div>
+  <div class="form-body">
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_objetivos">Objetivos patrimoniales principales *</div>
+      <p style="font-size:13px;color:var(--mid);margin-bottom:12px" data-i18n="objInstr">Seleccione todos los que le sean relevantes (mínimo 1):</p>
+      <div class="obj-tags" id="objTagsContainer">
+        <label class="obj-tag"><input type="checkbox" value="jubilacion"/>🏖️ <span data-i18n="objJubilacion">Independencia financiera</span></label>
+        <label class="obj-tag"><input type="checkbox" value="inmueble"/>🏠 <span data-i18n="objInmueble">Compra de inmueble</span></label>
+        <label class="obj-tag"><input type="checkbox" value="educacion"/>🎓 <span data-i18n="objEducacion">Educación de hijos</span></label>
+        <label class="obj-tag"><input type="checkbox" value="optimizacion"/>💼 <span data-i18n="objOptimizacion">Optimización fiscal</span></label>
+        <label class="obj-tag"><input type="checkbox" value="renta"/>💰 <span data-i18n="objRenta">Generar renta pasiva</span></label>
+        <label class="obj-tag"><input type="checkbox" value="negocio"/>🚀 <span data-i18n="objNegocio">Invertir en negocio</span></label>
+        <label class="obj-tag"><input type="checkbox" value="herencia"/>🏛️ <span data-i18n="objHerencia">Planificación hereditaria</span></label>
+        <label class="obj-tag"><input type="checkbox" value="internacional"/>🌍 <span data-i18n="objInternacional">Diversificación internacional</span></label>
+        <label class="obj-tag"><input type="checkbox" value="deuda"/>📉 <span data-i18n="objDeuda">Reducción de deuda</span></label>
+        <label class="obj-tag"><input type="checkbox" value="liquidez"/>🛡️ <span data-i18n="objLiquidez">Colchón de seguridad</span></label>
+      </div>
+      <div class="err-msg" id="err-objectives" style="margin-top:8px" data-i18n="errObjectives">Selecciona al menos un objetivo patrimonial</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_horizonte">Horizonte y patrimonio objetivo</div>
+      <div class="grid-2">
+        <div>
+          <label class="req" for="horizonte" data-i18n="lHorizonte">Horizonte de inversión principal</label>
+          <select id="horizonte" data-i18n-sel="optsHorizonte">
+            <option value=""></option>
+          </select>
+          <div class="err-msg" id="err-horizonte" data-i18n="errHorizonte">Selecciona un horizonte de inversión</div>
+        </div>
+        <div>
+          <label for="edadJubilacion"><span data-i18n="lEdadJubilacion">Edad objetivo para independencia financiera</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <input type="number" id="edadJubilacion" data-i18n-ph="phEdadJubilacion" placeholder="Ej. 55" min="30" max="80"/>
+        </div>
+        <div class="full">
+          <label for="patrimonioObjetivo"><span data-i18n="lPatrimonioObjetivo">Patrimonio neto objetivo a largo plazo</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <div class="currency-wrap"><span class="currency-sym">€</span><input type="number" id="patrimonioObjetivo" data-i18n-ph="phPatrimonioObjetivo" placeholder="Ej. 2000000"/></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_motivacion">Motivación y situación actual</div>
+      <label class="req" for="motivacion" data-i18n="lMotivacion">¿Cuál es su principal motivación para buscar asesoramiento ahora?</label>
+      <textarea id="motivacion" data-i18n-ph="phMotivacion" placeholder="Cuéntenos en sus propias palabras qué le ha llevado a buscar asesoramiento patrimonial en este momento..."></textarea>
+      <div class="err-msg" id="err-motivacion" data-i18n="errMotivacion">Cuéntenos brevemente qué le ha motivado a contactarnos</div>
+    </div>
+  </div>
+  <div class="form-nav">
+    <button class="btn-back" onclick="prevStep(5)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg> <span data-i18n="btnAnterior">Anterior</span></button>
+    <div class="step-counter" data-i18n="sc5">Paso 5 de 7</div>
+    <button class="btn-next" onclick="nextStep(5)"><span data-i18n="btnContinuar">Continuar</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══ STEP 6: PERFIL DE RIESGO ═══ -->
+<div class="step" id="step6">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="s6tag">PASO 6 DE 7</div>
+    <div class="section-title" data-i18n="s6title">Perfil de riesgo</div>
+    <div class="section-subtitle" data-i18n="s6sub">Su relación con el riesgo es fundamental para construir una cartera adecuada a usted.</div>
+  </div>
+  <div class="form-body">
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_perfilRiesgo">Perfil inversor *</div>
+      <p style="font-size:13px;color:var(--mid);margin-bottom:14px" data-i18n="riskInstr">Seleccione el perfil que mejor le describe:</p>
+      <div class="risk-cards" id="riskCards">
+        <label class="risk-card" onclick="selectRisk(this,'conservador')">
+          <input type="radio" name="riskProfile" value="conservador"/>
+          <span class="risk-icon">🛡️</span>
+          <div class="risk-name" data-i18n="rcConservadorName">Conservador</div>
+          <div class="risk-desc" data-i18n="rcConservadorDesc">Priorizo preservar el capital. Acepto rentabilidades bajas a cambio de mínima volatilidad.</div>
+        </label>
+        <label class="risk-card" onclick="selectRisk(this,'moderado')">
+          <input type="radio" name="riskProfile" value="moderado"/>
+          <span class="risk-icon">⚖️</span>
+          <div class="risk-name" data-i18n="rcModeradoName">Moderado</div>
+          <div class="risk-desc" data-i18n="rcModeradoDesc">Busco equilibrio entre crecimiento y estabilidad. Acepto cierta volatilidad a mediano plazo.</div>
+        </label>
+        <label class="risk-card" onclick="selectRisk(this,'dinamico')">
+          <input type="radio" name="riskProfile" value="dinamico"/>
+          <span class="risk-icon">🚀</span>
+          <div class="risk-name" data-i18n="rcDinamicoName">Dinámico</div>
+          <div class="risk-desc" data-i18n="rcDinamicoDesc">Busco maximizar rentabilidad a largo plazo. Acepto caídas temporales significativas.</div>
+        </label>
+      </div>
+      <div class="risk-error-msg" id="err-risk" data-i18n="errRisk">Selecciona tu perfil inversor</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_experiencia">Experiencia inversora</div>
+      <div class="grid-2">
+        <div>
+          <label class="req" for="experiencia" data-i18n="lExperiencia">Años de experiencia invirtiendo</label>
+          <select id="experiencia" data-i18n-sel="optsExperiencia">
+            <option value=""></option>
+          </select>
+          <div class="err-msg" id="err-experiencia" data-i18n="errExperiencia">Selecciona tu experiencia inversora</div>
+        </div>
+        <div>
+          <label class="req" for="instrumentos" data-i18n="lInstrumentos">Instrumentos con los que ha operado</label>
+          <select id="instrumentos" data-i18n-sel="optsInstrumentos">
+            <option value=""></option>
+          </select>
+          <div class="err-msg" id="err-instrumentos" data-i18n="errInstrumentos">Selecciona los instrumentos con los que has operado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_reaccion">Reacción ante caídas del mercado</div>
+      <label style="margin-bottom:12px;display:block" data-i18n-html="lTolerancia">Si su cartera cayera un <strong id="caida-label">15%</strong> en 3 meses, usted...</label>
+      <div class="range-wrap">
+        <input type="range" id="toleranciaCaida" min="1" max="5" value="3" step="1" oninput="updateCaidaLabel(this.value)"/>
+        <div class="range-labels">
+          <span data-i18n="rlVenderia">Vendería todo</span>
+          <span data-i18n="rlMantendria">Mantendría</span>
+          <span data-i18n="rlCompraria">Compraría más</span>
+        </div>
+      </div>
+      <div class="range-value" id="caida-reaction"></div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title" data-i18n="fg_liquidez">Liquidez necesaria</div>
+      <div class="grid-2">
+        <div>
+          <label data-i18n="lLiquidezPct">¿Qué % de su patrimonio necesita líquido (accesible en &lt;30 días)?</label>
+          <div class="range-wrap">
+            <input type="range" id="liquidezNecesaria" min="0" max="100" value="20" step="5" oninput="updateLiquidezLabel(this.value)"/>
+            <div class="range-labels"><span>0%</span><span>50%</span><span>100%</span></div>
+          </div>
+          <div class="range-value" id="liquidez-value">20%</div>
+        </div>
+        <div>
+          <label for="notasRiesgo"><span data-i18n="lNotasRiesgo">Notas sobre tolerancia al riesgo</span> <span class="opt" data-i18n="opt">(opcional)</span></label>
+          <textarea id="notasRiesgo" data-i18n-ph="phNotasRiesgo" placeholder="Cualquier consideración especial sobre su tolerancia o restricciones de inversión..." style="min-height:70px"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-nav">
+    <button class="btn-back" onclick="prevStep(6)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg> <span data-i18n="btnAnterior">Anterior</span></button>
+    <div class="step-counter" data-i18n="sc6">Paso 6 de 7</div>
+    <button class="btn-next" style="background:var(--green)" onclick="nextStep(6)"><span data-i18n="btnVerResumen">Ver resumen</span> ✓</button>
+  </div>
+</div>
+
+<!-- ═══ STEP 7: RESUMEN ═══ -->
+<div class="step" id="step7">
+  <div class="section-header">
+    <div class="section-tag" data-i18n="s7tag">RESUMEN COMPLETO</div>
+    <div class="section-title" data-i18n="s7title">Su perfil patrimonial</div>
+    <div class="section-subtitle" data-i18n="s7sub">Revise sus datos. Puede volver atrás en cualquier momento para corregir.</div>
+  </div>
+  <div class="form-body">
+    <div class="copy-success" id="copySuccess">✅ <span data-i18n="copySuccess">Datos copiados al portapapeles en formato JSON</span></div>
+    <div class="summary-kpis" id="summaryKpis">
+      <div class="summary-kpi" id="kpi-activos"><div class="kpi-label" data-i18n="kpiActivos">Total Activos</div><div class="kpi-value">€0</div></div>
+      <div class="summary-kpi" id="kpi-pasivos"><div class="kpi-label" data-i18n="kpiPasivos">Total Pasivos</div><div class="kpi-value">€0</div></div>
+      <div class="summary-kpi" id="kpi-neto"><div class="kpi-label" data-i18n="kpiNeto">Patrimonio Neto</div><div class="kpi-value">€0</div></div>
+    </div>
+    <div class="summary-section"><div class="summary-section-title" data-i18n="sumPersonal">Datos personales</div><table class="summary-table" id="summary-personal"></table></div>
+    <div class="summary-section"><div class="summary-section-title" data-i18n="sumActivos">Activos</div><table class="summary-table" id="summary-activos"></table></div>
+    <div class="summary-section"><div class="summary-section-title" data-i18n="sumPasivos">Pasivos</div><table class="summary-table" id="summary-pasivos"></table></div>
+    <div class="summary-section"><div class="summary-section-title" data-i18n="sumFlujos">Flujos mensuales</div><table class="summary-table" id="summary-flujos"></table></div>
+    <div class="summary-section"><div class="summary-section-title" data-i18n="sumObjetivos">Objetivos y horizonte</div><table class="summary-table" id="summary-objetivos"></table></div>
+    <div class="summary-section"><div class="summary-section-title" data-i18n="sumRiesgo">Perfil de riesgo</div><table class="summary-table" id="summary-riesgo"></table></div>
+    <!-- FORMSPREE SUBMIT -->
+    <div id="submitArea" style="margin-top:8px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+      <button class="btn-print" onclick="window.print()">🖨️ <span data-i18n="btnImprimir">Imprimir / PDF</span></button>
+      <button id="btnSubmit" class="btn-submit" onclick="submitToHofCare()">
+        <span id="btnSubmitText">📤 Enviar a HofCare Capital</span>
+        <span id="btnSubmitSpinner" style="display:none">⏳ Enviando...</span>
+      </button>
+    </div>
+    <div id="submitSuccess" style="display:none;background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:14px 18px;font-size:14px;font-weight:600;color:#166534;margin-bottom:16px">
+      ✅ Formulario enviado correctamente. Le responderemos en 2 días hábiles a <span id="confirmEmail"></span>
+    </div>
+    <div id="submitError" style="display:none;background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:14px 18px;font-size:14px;font-weight:600;color:#991b1b;margin-bottom:16px">
+      ❌ Error al enviar. Por favor, copia los datos en JSON o escríbenos a hofcarecapital@gmail.com
+    </div>
+    <div class="final-note">
+      <h3 data-i18n="finalTitle">¡Formulario completado!</h3>
+      <p data-i18n-html="finalText">Analizaremos su perfil patrimonial y nos pondremos en contacto en un plazo de <strong style="color:white">2 días hábiles</strong> con su Wealth Snapshot personalizado.<br/>Cualquier duda: <strong style="color:white">hola@hofcarecapital.com</strong></p>
+    </div>
+  </div>
+  <div class="form-nav">
+    <button class="btn-back" onclick="prevStep(7)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg> <span data-i18n="btnEditar">Editar respuestas</span></button>
+    <div class="step-counter" data-i18n="sc7">Paso 7 de 7</div>
+    <div></div>
+  </div>
+</div>
+
+</div><!-- /form-card -->
+
+<!-- LEGAL SECTION -->
+<section class="legal-section" id="info-legal">
+  <h2 data-i18n="legalTitle">Información legal y protección de datos</h2>
+  <div id="legalContent"></div>
+</section>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   TRANSLATIONS
+═══════════════════════════════════════════════════════ */
+const T = {
+  es: {
+    pageTitle: 'Formulario de Onboarding · HofCare Capital',
+    headerBadgeTitle: 'Formulario Patrimonial',
+    headerBadgeSubtitle: 'Confidencial · Datos protegidos (RGPD)',
+
+    toastSaved: 'Progreso guardado',
+    toastCleared: 'Progreso borrado',
+
+    restoreMsg: 'Tiene un formulario guardado. ¿Desea recuperarlo?',
+    restoreYes: 'Sí, recuperar',
+    restoreNo: 'No, empezar de cero',
+
+    autosaveLabel: 'Guardar mi progreso automáticamente en este navegador',
+    autosaveNote: 'Los datos se almacenan únicamente en su navegador (localStorage) y no se transmiten a ningún servidor. Puede borrarlos en cualquier momento.',
+    autosaveClear: 'Borrar progreso guardado',
+
+    s1tag: 'PASO 1 DE 7', s2tag: 'PASO 2 DE 7', s3tag: 'PASO 3 DE 7', s4tag: 'PASO 4 DE 7',
+    s5tag: 'PASO 5 DE 7', s6tag: 'PASO 6 DE 7', s7tag: 'RESUMEN COMPLETO',
+
+    s1title: 'Datos personales', s2title: 'Activos patrimoniales', s3title: 'Pasivos y deudas',
+    s4title: 'Ingresos y gastos', s5title: 'Objetivos y horizonte', s6title: 'Perfil de riesgo',
+    s7title: 'Su perfil patrimonial',
+
+    s1sub: 'Información básica para personalizar su análisis. Los campos marcados con * son obligatorios.',
+    s2sub: 'Valor aproximado de mercado de todos sus activos. Las cifras pueden ser estimadas — no se requiere exactitud contable.',
+    s3sub: 'Capital pendiente de todas sus deudas. Si no tiene deudas, puede continuar directamente.',
+    s4sub: 'Importes mensuales netos. Puede introducir 0 si una categoría no aplica a su situación.',
+    s5sub: 'Cuéntenos hacia dónde quiere llegar. Esto orienta todo nuestro análisis.',
+    s6sub: 'Su relación con el riesgo es fundamental para construir una cartera adecuada a usted.',
+    s7sub: 'Revise sus datos. Puede volver atrás en cualquier momento para corregir.',
+
+    sl1: 'Datos<br>personales', sl2: 'Activos', sl3: 'Pasivos', sl4: 'Flujos',
+    sl5: 'Objetivos', sl6: 'Perfil<br>riesgo', sl7: 'Resumen',
+
+    sc1: 'Paso 1 de 7', sc2: 'Paso 2 de 7', sc3: 'Paso 3 de 7', sc4: 'Paso 4 de 7',
+    sc5: 'Paso 5 de 7', sc6: 'Paso 6 de 7', sc7: 'Paso 7 de 7',
+
+    infoBox: '🔒 <strong>Confidencialidad garantizada.</strong> Sus datos se usan exclusivamente para elaborar su análisis patrimonial y no se comparten con terceros. Consulte nuestra <a href="#info-legal">política de privacidad</a> para más información.',
+
+    fg_id: 'Identificación',
+    fg_prof: 'Situación profesional',
+    fg_gdpr: 'Protección de datos (RGPD)',
+    fg_inmuebles: 'Inmuebles',
+    fg_financiero: 'Activos financieros',
+    fg_efectivo: 'Efectivo y liquidez',
+    fg_otrosActivos: 'Otros activos',
+    fg_hipotecas: 'Hipotecas',
+    fg_prestamos: 'Préstamos y otras deudas',
+    fg_avales: 'Avales y garantías',
+    fg_ingresos: 'Ingresos mensuales netos',
+    fg_gastosFijos: 'Gastos mensuales fijos',
+    fg_gastosVar: 'Gastos variables estimados',
+    fg_eventosLiq: 'Eventos de liquidez futuros',
+    fg_objetivos: 'Objetivos patrimoniales principales *',
+    fg_horizonte: 'Horizonte y patrimonio objetivo',
+    fg_motivacion: 'Motivación y situación actual',
+    fg_perfilRiesgo: 'Perfil inversor *',
+    fg_experiencia: 'Experiencia inversora',
+    fg_reaccion: 'Reacción ante caídas del mercado',
+    fg_liquidez: 'Liquidez necesaria',
+    fg_autosave: 'Guardado de progreso',
+
+    lNombre: 'Nombre completo',
+    lEmail: 'Correo electrónico',
+    lEdad: 'Edad',
+    lPais: 'País de residencia',
+    lEstadoCivil: 'Estado civil',
+    lHijos: 'Hijos a cargo',
+    lSituacionLaboral: 'Situación laboral',
+    lSector: 'Sector profesional',
+    lComoConocio: '¿Cómo conoció HofCare Capital?',
+    lSalario: 'Salario / nómina neta',
+    lRentas: 'Rentas de alquiler netas',
+    lDividendos: 'Dividendos e intereses netos',
+    lOtrosIngresos: 'Otros ingresos recurrentes',
+    lCuotaHipoteca: 'Cuota hipoteca mensual total',
+    lCuotaPrestamos: 'Cuota préstamos mensual total',
+    lAlquilerGasto: 'Alquiler',
+    lSeguros: 'Seguros vida, salud y hogar',
+    lManutención: 'Manutención y gastos del hogar',
+    lOcio: 'Ocio, viajes y educación',
+    lOtrosGastos: 'Otros gastos',
+    lAhorroMensual: 'Ahorro mensual actual',
+    lEventosLiquidez: '¿Espera recibir o desembolsar sumas importantes en los próximos 10 años?',
+    lHorizonte: 'Horizonte de inversión principal',
+    lEdadJubilacion: 'Edad objetivo para independencia financiera',
+    lPatrimonioObjetivo: 'Patrimonio neto objetivo a largo plazo',
+    lMotivacion: '¿Cuál es su principal motivación para buscar asesoramiento ahora?',
+    lTolerancia: 'Si su cartera cayera un <strong id="caida-label">15%</strong> en 3 meses, usted...',
+    lLiquidezPct: '¿Qué % de su patrimonio necesita líquido (accesible en <30 días)?',
+    lNotasRiesgo: 'Notas sobre tolerancia al riesgo',
+    lAvales: '¿Tiene avales o garantías sobre deudas de terceros?',
+    lNegocio: 'Negocio propio — valor estimado',
+    lVehiculos: 'Vehículos y otros activos',
+    lEfectivo: 'Saldo en cuentas corrientes y ahorro',
+    lOtrosLiquidos: 'Otros activos líquidos',
+    lExperiencia: 'Años de experiencia invirtiendo',
+    lInstrumentos: 'Instrumentos con los que ha operado',
+
+    opt: '(opcional)', optif: '(opcional)', optEst: '(si no tiene hipoteca)', optEstim: '(estimado)',
+
+    objInstr: 'Seleccione todos los que le sean relevantes (mínimo 1):',
+    riskInstr: 'Seleccione el perfil que mejor le describe:',
+
+    rcConservadorName: 'Conservador',
+    rcConservadorDesc: 'Priorizo preservar el capital. Acepto rentabilidades bajas a cambio de mínima volatilidad.',
+    rcModeradoName: 'Moderado',
+    rcModeradoDesc: 'Busco equilibrio entre crecimiento y estabilidad. Acepto cierta volatilidad a mediano plazo.',
+    rcDinamicoName: 'Dinámico',
+    rcDinamicoDesc: 'Busco maximizar rentabilidad a largo plazo. Acepto caídas temporales significativas.',
+
+    rlVenderia: 'Vendería todo',
+    rlMantendria: 'Mantendría',
+    rlCompraria: 'Compraría más',
+
+    objJubilacion: 'Independencia financiera',
+    objInmueble: 'Compra de inmueble',
+    objEducacion: 'Educación de hijos',
+    objOptimizacion: 'Optimización fiscal',
+    objRenta: 'Generar renta pasiva',
+    objNegocio: 'Invertir en negocio',
+    objHerencia: 'Planificación hereditaria',
+    objInternacional: 'Diversificación internacional',
+    objDeuda: 'Reducción de deuda',
+    objLiquidez: 'Colchón de seguridad',
+
+    btnContinuar: 'Continuar',
+    btnAnterior: 'Anterior',
+    btnVerResumen: 'Ver resumen',
+    btnEditar: 'Editar respuestas',
+    btnCopiarJSON: 'Copiar datos JSON',
+    btnImprimir: 'Imprimir / PDF',
+
+    copySuccess: 'Datos copiados al portapapeles en formato JSON',
+
+    addInmueble: '+ Añadir inmueble',
+    addFinanciero: '+ Añadir activo financiero',
+    addHipoteca: '+ Añadir hipoteca',
+    addPrestamo: '+ Añadir deuda',
+
+    rhDesc: 'Descripción',
+    rhValor: 'Valor mercado (€)',
+    rhValorFin: 'Valor (€)',
+    rhValorPendiente: 'Capital pendiente (€)',
+    rhCat: 'Categoría',
+    rhTipo: 'Tipo',
+
+    gdprText: 'HofCare Capital trata sus datos personales con el único fin de elaborar su análisis patrimonial personalizado, de conformidad con el Reglamento General de Protección de Datos (RGPD – UE 2016/679). Tiene derecho de acceso, rectificación, supresión y portabilidad de sus datos en cualquier momento.',
+    gdprCheckLabel: 'He leído y acepto la <a href="#info-legal">Política de Privacidad</a> de HofCare Capital y consiento el tratamiento de mis datos personales para la elaboración de mi análisis patrimonial.',
+    gdprError: 'Debes aceptar la política de privacidad para continuar',
+
+    errNombre: 'Este campo es obligatorio',
+    errEmail: 'Introduce un email válido',
+    errEdad: 'La edad debe estar entre 18 y 99 años',
+    errPais: 'Selecciona tu país de residencia',
+    errEstadoCivil: 'Selecciona tu estado civil',
+    errSituacionLaboral: 'Selecciona tu situación laboral',
+    errSalario: 'Indica tu salario neto (puede ser 0)',
+    errManutención: 'Indica el gasto mensual en manutención (puede ser 0)',
+    errObjectives: 'Selecciona al menos un objetivo patrimonial',
+    errHorizonte: 'Selecciona un horizonte de inversión',
+    errMotivacion: 'Cuéntenos brevemente qué le ha motivado a contactarnos',
+    errRisk: 'Selecciona tu perfil inversor',
+    errExperiencia: 'Selecciona tu experiencia inversora',
+    errInstrumentos: 'Selecciona los instrumentos con los que has operado',
+
+    optsEstadoCivil: [['soltero','Soltero/a'],['casado','Casado/a'],['union','Unión de hecho'],['divorciado','Divorciado/a'],['viudo','Viudo/a']],
+    optsHijos: [['0','Sin hijos a cargo'],['1','1 hijo'],['2','2 hijos'],['3','3 hijos'],['4+','4 o más']],
+    optsSituacionLaboral: [['cuenta_ajena','Empleado por cuenta ajena'],['autonomo','Autónomo / Freelance'],['empresario','Empresario / Socio'],['directivo','Directivo / C-Level'],['jubilado','Jubilado/a'],['otros','Otros']],
+    optsComoConocio: [['linkedin','LinkedIn'],['recomendacion','Recomendación personal'],['google','Búsqueda en Google'],['redes','Redes sociales'],['otros','Otros']],
+    optsHorizonte: [['corto','Corto plazo (menos de 3 años)'],['medio','Medio plazo (3–7 años)'],['largo','Largo plazo (7–15 años)'],['muy_largo','Muy largo plazo (más de 15 años)']],
+    optsExperiencia: [['ninguna','Sin experiencia'],['menos3','Menos de 3 años'],['3a10','3 a 10 años'],['mas10','Más de 10 años']],
+    optsInstrumentos: [['depositos','Solo depósitos / cuentas'],['fondos','Fondos de inversión'],['acciones','Acciones cotizadas'],['complejos','Derivados / productos complejos'],['mixto','Varios de los anteriores']],
+
+    optsImmuebleCat: [['habitual','Vivienda habitual'],['inversion','Inversión'],['vacacional','Vacacional'],['comercial','Local / comercial']],
+    optsFinancieroCat: [['fondos','Fondos inversión'],['acciones','Acciones'],['renta_fija','Renta fija'],['depositos','Depósitos'],['planes','Plan de pensiones'],['crypto','Criptoactivos'],['otros','Otros']],
+    optsHipotecaCat: [['fija','Tipo fijo'],['variable','Variable'],['mixta','Mixta']],
+    optsPrestamoCat: [['personal','Personal'],['coche','Vehículo'],['empresarial','Empresarial'],['tarjeta','Tarjeta crédito'],['otros','Otros']],
+
+    caidaReactions: ['','Vendería para limitar las pérdidas','Reduciría la posición parcialmente','Mantendría la posición y esperaría la recuperación','Compraría algo más aprovechando el precio','Compraría agresivamente en la caída'],
+
+    sumPersonal: 'Datos personales',
+    sumActivos: 'Activos',
+    sumPasivos: 'Pasivos',
+    sumFlujos: 'Flujos mensuales',
+    sumObjetivos: 'Objetivos y horizonte',
+    sumRiesgo: 'Perfil de riesgo',
+
+    kpiActivos: 'Total Activos',
+    kpiPasivos: 'Total Pasivos',
+    kpiNeto: 'Patrimonio Neto',
+
+    tNombre: 'Nombre', tEmail: 'Email', tEdad: 'Edad', tPais: 'País',
+    tEstadoCivil: 'Estado civil', tHijos: 'Hijos a cargo', tSitLaboral: 'Situación laboral',
+    tSector: 'Sector', tInmuebles: 'Inmuebles', tFinancieros: 'Activos financieros',
+    tEfectivo: 'Efectivo / cuentas', tOtrosLiq: 'Otros líquidos', tNegocio: 'Negocio',
+    tVehiculos: 'Vehículos / otros', tTotalActivos: 'Total activos', tHipotecas: 'Hipotecas',
+    tPrestamos: 'Préstamos / deudas', tAvales: 'Avales', tTotalPasivos: 'Total pasivos',
+    tPatrimNeto: 'Patrimonio neto', tIngresosTotal: 'Ingresos mensuales totales',
+    tGastosTotal: 'Gastos mensuales totales', tFlujoNeto: 'Flujo neto mensual',
+    tAhorroDecl: 'Ahorro mensual declarado', tTasaAhorro: 'Tasa de ahorro estimada',
+    tEventos: 'Eventos de liquidez', tObjetivosSelec: 'Objetivos seleccionados',
+    tHorizonte: 'Horizonte', tEdadIF: 'Edad objetivo IF', tPatrimObjetivo: 'Patrimonio objetivo',
+    tMotivacion: 'Motivación', tPerfilInversor: 'Perfil inversor', tExperiencia: 'Experiencia',
+    tInstrumentos: 'Instrumentos', tReaccionCaida: 'Reacción ante caída',
+    tLiquidezNec: 'Liquidez necesaria', tNotas: 'Notas',
+
+    sumAnos: ' años',
+    sumSinHijos: 'Sin hijos',
+
+    sumEstCivil: {soltero:'Soltero/a',casado:'Casado/a',union:'Unión de hecho',divorciado:'Divorciado/a',viudo:'Viudo/a'},
+    sumSitLab: {cuenta_ajena:'Empleado por cuenta ajena',autonomo:'Autónomo',empresario:'Empresario',directivo:'Directivo / C-Level',jubilado:'Jubilado/a',otros:'Otros'},
+    sumRisk: {conservador:'Conservador 🛡️',moderado:'Moderado ⚖️',dinamico:'Dinámico 🚀'},
+    sumHorizonte: {corto:'Corto plazo (<3 años)',medio:'Medio plazo (3–7 años)',largo:'Largo plazo (7–15 años)',muy_largo:'Muy largo plazo (>15 años)'},
+
+    finalTitle: '¡Formulario completado!',
+    finalText: 'Analizaremos su perfil patrimonial y nos pondremos en contacto en un plazo de <strong style="color:white">2 días hábiles</strong> con su Wealth Snapshot personalizado.<br/>Cualquier duda: <strong style="color:white">hola@hofcarecapital.com</strong>',
+
+    legalTitle: 'Información legal y protección de datos',
+    legalResponsable: '<strong>Responsable del tratamiento:</strong> HofCare Capital S.L. — hola@hofcarecapital.com',
+    legalFinalidad: '<strong>Finalidad:</strong> Elaborar su análisis patrimonial personalizado y prestarle el servicio de asesoramiento financiero solicitado.',
+    legalBase: '<strong>Base jurídica:</strong> Consentimiento expreso del interesado (Art. 6.1.a RGPD) y ejecución del contrato de servicios (Art. 6.1.b RGPD).',
+    legalConservacion: '<strong>Conservación:</strong> Los datos se conservarán durante el tiempo necesario para la prestación del servicio y el cumplimiento de las obligaciones legales aplicables.',
+    legalDestinatarios: '<strong>Destinatarios:</strong> Los datos no se cederán a terceros salvo obligación legal o consentimiento expreso del interesado.',
+    legalDerechos: '<strong>Derechos:</strong> Puede ejercer sus derechos de acceso, rectificación, supresión, portabilidad, limitación y oposición escribiendo a hola@hofcarecapital.com.',
+    legalContacto: '<strong>Contacto DPD:</strong> hola@hofcarecapital.com',
+
+    phNombre: 'Ej. María García López',
+    phEmail: 'nombre@email.com',
+    phEdad: 'Ej. 42',
+    phPais: 'Seleccionar país...',
+    phSector: 'Ej. Tecnología, Sanidad, Finanzas...',
+    phAvales: 'Describa brevemente si ha avalado préstamos de terceros o tiene compromisos fuera de balance...',
+    phEventosLiquidez: 'Ej. Herencia estimada ~200.000€ en 5 años. Venta de empresa prevista 2028...',
+    phMotivacion: 'Cuéntenos en sus propias palabras qué le ha llevado a buscar asesoramiento patrimonial en este momento...',
+    phNotasRiesgo: 'Cualquier consideración especial sobre su tolerancia o restricciones de inversión...',
+    phEdadJubilacion: 'Ej. 55',
+    phPatrimonioObjetivo: 'Ej. 2000000',
+    phInmuebleDesc: 'Ej. Vivienda habitual Madrid',
+    phFinancieroDesc: 'Ej. Cartera de fondos ING',
+    phHipotecaDesc: 'Ej. Hipoteca vivienda habitual',
+    phPrestamoDesc: 'Ej. Préstamo coche',
+    phDesc: 'Descripción...'
+  },
+
+  en: {
+    pageTitle: 'Onboarding Form · HofCare Capital',
+    headerBadgeTitle: 'Wealth Form',
+    headerBadgeSubtitle: 'Confidential · GDPR Protected',
+
+    toastSaved: 'Progress saved',
+    toastCleared: 'Progress cleared',
+
+    restoreMsg: 'You have a saved form. Would you like to restore it?',
+    restoreYes: 'Yes, restore',
+    restoreNo: 'No, start over',
+
+    autosaveLabel: 'Automatically save my progress in this browser',
+    autosaveNote: 'Data is stored only in your browser (localStorage) and is not transmitted to any server. You can delete it at any time.',
+    autosaveClear: 'Clear saved progress',
+
+    s1tag: 'STEP 1 OF 7', s2tag: 'STEP 2 OF 7', s3tag: 'STEP 3 OF 7', s4tag: 'STEP 4 OF 7',
+    s5tag: 'STEP 5 OF 7', s6tag: 'STEP 6 OF 7', s7tag: 'FULL SUMMARY',
+
+    s1title: 'Personal data', s2title: 'Wealth assets', s3title: 'Liabilities',
+    s4title: 'Income & expenses', s5title: 'Goals & horizon', s6title: 'Risk profile',
+    s7title: 'Your wealth profile',
+
+    s1sub: 'Basic information to personalise your analysis. Fields marked with * are required.',
+    s2sub: 'Approximate market value of all your assets. Figures can be estimated — exact accounting is not required.',
+    s3sub: 'Outstanding capital on all your debts. If you have no debts, you may continue directly.',
+    s4sub: 'Monthly net amounts. You may enter 0 if a category does not apply to your situation.',
+    s5sub: 'Tell us where you want to go. This guides our entire analysis.',
+    s6sub: 'Your relationship with risk is essential to build a portfolio tailored to you.',
+    s7sub: 'Review your data. You may go back at any time to correct.',
+
+    sl1: 'Personal<br>data', sl2: 'Assets', sl3: 'Liabilities', sl4: 'Cash flows',
+    sl5: 'Goals', sl6: 'Risk<br>profile', sl7: 'Summary',
+
+    sc1: 'Step 1 of 7', sc2: 'Step 2 of 7', sc3: 'Step 3 of 7', sc4: 'Step 4 of 7',
+    sc5: 'Step 5 of 7', sc6: 'Step 6 of 7', sc7: 'Step 7 of 7',
+
+    infoBox: '🔒 <strong>Guaranteed confidentiality.</strong> Your data is used exclusively to produce your wealth analysis and is not shared with third parties. See our <a href="#info-legal">privacy policy</a> for more information.',
+
+    fg_id: 'Identification',
+    fg_prof: 'Professional situation',
+    fg_gdpr: 'Data protection (GDPR)',
+    fg_inmuebles: 'Real estate',
+    fg_financiero: 'Financial assets',
+    fg_efectivo: 'Cash & liquidity',
+    fg_otrosActivos: 'Other assets',
+    fg_hipotecas: 'Mortgages',
+    fg_prestamos: 'Loans & other debts',
+    fg_avales: 'Guarantees',
+    fg_ingresos: 'Monthly net income',
+    fg_gastosFijos: 'Fixed monthly expenses',
+    fg_gastosVar: 'Estimated variable expenses',
+    fg_eventosLiq: 'Future liquidity events',
+    fg_objetivos: 'Main wealth goals *',
+    fg_horizonte: 'Horizon & target wealth',
+    fg_motivacion: 'Motivation & current situation',
+    fg_perfilRiesgo: 'Investor profile *',
+    fg_experiencia: 'Investment experience',
+    fg_reaccion: 'Reaction to market drops',
+    fg_liquidez: 'Required liquidity',
+    fg_autosave: 'Progress saving',
+
+    lNombre: 'Full name',
+    lEmail: 'Email address',
+    lEdad: 'Age',
+    lPais: 'Country of residence',
+    lEstadoCivil: 'Marital status',
+    lHijos: 'Dependent children',
+    lSituacionLaboral: 'Employment status',
+    lSector: 'Professional sector',
+    lComoConocio: 'How did you hear about HofCare Capital?',
+    lSalario: 'Net salary / wage',
+    lRentas: 'Net rental income',
+    lDividendos: 'Net dividends & interest',
+    lOtrosIngresos: 'Other recurring income',
+    lCuotaHipoteca: 'Total monthly mortgage payment',
+    lCuotaPrestamos: 'Total monthly loan payments',
+    lAlquilerGasto: 'Rent',
+    lSeguros: 'Life, health & home insurance',
+    lManutención: 'Household & living expenses',
+    lOcio: 'Leisure, travel & education',
+    lOtrosGastos: 'Other expenses',
+    lAhorroMensual: 'Current monthly savings',
+    lEventosLiquidez: 'Do you expect to receive or spend significant sums in the next 10 years?',
+    lHorizonte: 'Main investment horizon',
+    lEdadJubilacion: 'Target age for financial independence',
+    lPatrimonioObjetivo: 'Long-term target net wealth',
+    lMotivacion: 'What is your main motivation for seeking advice now?',
+    lTolerancia: 'If your portfolio dropped <strong id="caida-label">15%</strong> in 3 months, you would...',
+    lLiquidezPct: 'What % of your wealth do you need liquid (accessible in <30 days)?',
+    lNotasRiesgo: 'Notes on risk tolerance',
+    lAvales: 'Do you have guarantees on third-party debts?',
+    lNegocio: 'Own business — estimated value',
+    lVehiculos: 'Vehicles & other assets',
+    lEfectivo: 'Balance in current & savings accounts',
+    lOtrosLiquidos: 'Other liquid assets',
+    lExperiencia: 'Years of investing experience',
+    lInstrumentos: 'Instruments you have traded',
+
+    opt: '(optional)', optif: '(optional)', optEst: '(if no mortgage)', optEstim: '(estimated)',
+
+    objInstr: 'Select all that are relevant to you (minimum 1):',
+    riskInstr: 'Select the profile that best describes you:',
+
+    rcConservadorName: 'Conservative',
+    rcConservadorDesc: 'I prioritise preserving capital. I accept lower returns in exchange for minimal volatility.',
+    rcModeradoName: 'Moderate',
+    rcModeradoDesc: 'I seek a balance between growth and stability. I accept some volatility over the medium term.',
+    rcDinamicoName: 'Dynamic',
+    rcDinamicoDesc: 'I aim to maximise long-term returns. I accept significant temporary drawdowns.',
+
+    rlVenderia: 'Sell everything',
+    rlMantendria: 'Hold',
+    rlCompraria: 'Buy more',
+
+    objJubilacion: 'Financial independence',
+    objInmueble: 'Property purchase',
+    objEducacion: 'Children\'s education',
+    objOptimizacion: 'Tax optimisation',
+    objRenta: 'Generate passive income',
+    objNegocio: 'Business investment',
+    objHerencia: 'Estate planning',
+    objInternacional: 'International diversification',
+    objDeuda: 'Debt reduction',
+    objLiquidez: 'Emergency fund',
+
+    btnContinuar: 'Continue',
+    btnAnterior: 'Back',
+    btnVerResumen: 'View summary',
+    btnEditar: 'Edit answers',
+    btnCopiarJSON: 'Copy JSON data',
+    btnImprimir: 'Print / PDF',
+
+    copySuccess: 'Data copied to clipboard in JSON format',
+
+    addInmueble: '+ Add property',
+    addFinanciero: '+ Add financial asset',
+    addHipoteca: '+ Add mortgage',
+    addPrestamo: '+ Add debt',
+
+    rhDesc: 'Description',
+    rhValor: 'Market value (€)',
+    rhValorFin: 'Value (€)',
+    rhValorPendiente: 'Outstanding capital (€)',
+    rhCat: 'Category',
+    rhTipo: 'Type',
+
+    gdprText: 'HofCare Capital processes your personal data solely for the purpose of producing your personalised wealth analysis, in accordance with the General Data Protection Regulation (GDPR – EU 2016/679). You have the right to access, rectify, delete and port your data at any time.',
+    gdprCheckLabel: 'I have read and accept the <a href="#info-legal">Privacy Policy</a> of HofCare Capital and consent to the processing of my personal data for the production of my wealth analysis.',
+    gdprError: 'You must accept the privacy policy to continue',
+
+    errNombre: 'This field is required',
+    errEmail: 'Please enter a valid email address',
+    errEdad: 'Age must be between 18 and 99',
+    errPais: 'Please select your country of residence',
+    errEstadoCivil: 'Please select your marital status',
+    errSituacionLaboral: 'Please select your employment status',
+    errSalario: 'Please enter your net salary (can be 0)',
+    errManutención: 'Please enter your monthly household expenses (can be 0)',
+    errObjectives: 'Please select at least one wealth goal',
+    errHorizonte: 'Please select an investment horizon',
+    errMotivacion: 'Please tell us briefly what motivated you to contact us',
+    errRisk: 'Please select your investor profile',
+    errExperiencia: 'Please select your investing experience',
+    errInstrumentos: 'Please select the instruments you have traded',
+
+    optsEstadoCivil: [['soltero','Single'],['casado','Married'],['union','Civil partnership'],['divorciado','Divorced'],['viudo','Widowed']],
+    optsHijos: [['0','No dependent children'],['1','1 child'],['2','2 children'],['3','3 children'],['4+','4 or more']],
+    optsSituacionLaboral: [['cuenta_ajena','Employee'],['autonomo','Self-employed / Freelance'],['empresario','Business owner / Partner'],['directivo','Executive / C-Level'],['jubilado','Retired'],['otros','Other']],
+    optsComoConocio: [['linkedin','LinkedIn'],['recomendacion','Personal recommendation'],['google','Google search'],['redes','Social media'],['otros','Other']],
+    optsHorizonte: [['corto','Short term (under 3 years)'],['medio','Medium term (3–7 years)'],['largo','Long term (7–15 years)'],['muy_largo','Very long term (over 15 years)']],
+    optsExperiencia: [['ninguna','No experience'],['menos3','Less than 3 years'],['3a10','3 to 10 years'],['mas10','More than 10 years']],
+    optsInstrumentos: [['depositos','Deposits / savings accounts only'],['fondos','Investment funds'],['acciones','Listed equities'],['complejos','Derivatives / complex products'],['mixto','Several of the above']],
+
+    optsImmuebleCat: [['habitual','Primary residence'],['inversion','Investment'],['vacacional','Holiday'],['comercial','Commercial / retail']],
+    optsFinancieroCat: [['fondos','Investment funds'],['acciones','Equities'],['renta_fija','Fixed income'],['depositos','Deposits'],['planes','Pension plan'],['crypto','Crypto assets'],['otros','Other']],
+    optsHipotecaCat: [['fija','Fixed rate'],['variable','Variable rate'],['mixta','Mixed rate']],
+    optsPrestamoCat: [['personal','Personal'],['coche','Vehicle'],['empresarial','Business'],['tarjeta','Credit card'],['otros','Other']],
+
+    caidaReactions: ['','I would sell to limit losses','I would reduce the position partially','I would hold and wait for recovery','I would buy a little more at a lower price','I would buy aggressively on the dip'],
+
+    sumPersonal: 'Personal data',
+    sumActivos: 'Assets',
+    sumPasivos: 'Liabilities',
+    sumFlujos: 'Monthly cash flows',
+    sumObjetivos: 'Goals & horizon',
+    sumRiesgo: 'Risk profile',
+
+    kpiActivos: 'Total Assets',
+    kpiPasivos: 'Total Liabilities',
+    kpiNeto: 'Net Wealth',
+
+    tNombre: 'Name', tEmail: 'Email', tEdad: 'Age', tPais: 'Country',
+    tEstadoCivil: 'Marital status', tHijos: 'Children', tSitLaboral: 'Employment',
+    tSector: 'Sector', tInmuebles: 'Real estate', tFinancieros: 'Financial assets',
+    tEfectivo: 'Cash / accounts', tOtrosLiq: 'Other liquid', tNegocio: 'Business',
+    tVehiculos: 'Vehicles / other', tTotalActivos: 'Total assets', tHipotecas: 'Mortgages',
+    tPrestamos: 'Loans / debts', tAvales: 'Guarantees', tTotalPasivos: 'Total liabilities',
+    tPatrimNeto: 'Net wealth', tIngresosTotal: 'Total monthly income',
+    tGastosTotal: 'Total monthly expenses', tFlujoNeto: 'Monthly net cash flow',
+    tAhorroDecl: 'Declared monthly savings', tTasaAhorro: 'Estimated savings rate',
+    tEventos: 'Liquidity events', tObjetivosSelec: 'Selected goals',
+    tHorizonte: 'Horizon', tEdadIF: 'FI target age', tPatrimObjetivo: 'Target wealth',
+    tMotivacion: 'Motivation', tPerfilInversor: 'Investor profile', tExperiencia: 'Experience',
+    tInstrumentos: 'Instruments', tReaccionCaida: 'Reaction to drop',
+    tLiquidezNec: 'Required liquidity', tNotas: 'Notes',
+
+    sumAnos: ' years',
+    sumSinHijos: 'No children',
+
+    sumEstCivil: {soltero:'Single',casado:'Married',union:'Civil partnership',divorciado:'Divorced',viudo:'Widowed'},
+    sumSitLab: {cuenta_ajena:'Employee',autonomo:'Self-employed',empresario:'Business owner',directivo:'Executive / C-Level',jubilado:'Retired',otros:'Other'},
+    sumRisk: {conservador:'Conservative 🛡️',moderado:'Moderate ⚖️',dinamico:'Dynamic 🚀'},
+    sumHorizonte: {corto:'Short term (<3 yr)',medio:'Medium term (3–7 yr)',largo:'Long term (7–15 yr)',muy_largo:'Very long term (>15 yr)'},
+
+    finalTitle: 'Form completed!',
+    finalText: 'We will analyse your wealth profile and get in touch within <strong style="color:white">2 business days</strong> with your personalised Wealth Snapshot.<br/>Any questions: <strong style="color:white">hola@hofcarecapital.com</strong>',
+
+    legalTitle: 'Legal information & data protection',
+    legalResponsable: '<strong>Data controller:</strong> HofCare Capital S.L. — hola@hofcarecapital.com',
+    legalFinalidad: '<strong>Purpose:</strong> To produce your personalised wealth analysis and provide the requested advisory service.',
+    legalBase: '<strong>Legal basis:</strong> Explicit consent of the data subject (Art. 6.1.a GDPR) and performance of a service contract (Art. 6.1.b GDPR).',
+    legalConservacion: '<strong>Retention:</strong> Data will be retained for as long as necessary for service delivery and compliance with applicable legal obligations.',
+    legalDestinatarios: '<strong>Recipients:</strong> Data will not be transferred to third parties except as required by law or with your explicit consent.',
+    legalDerechos: '<strong>Rights:</strong> You may exercise your rights of access, rectification, erasure, portability, restriction and objection by writing to hola@hofcarecapital.com.',
+    legalContacto: '<strong>DPO contact:</strong> hola@hofcarecapital.com',
+
+    phNombre: 'E.g. John Smith',
+    phEmail: 'name@email.com',
+    phEdad: 'E.g. 42',
+    phPais: 'Select country...',
+    phSector: 'E.g. Technology, Healthcare, Finance...',
+    phAvales: 'Briefly describe if you have guaranteed third-party loans or have off-balance-sheet commitments...',
+    phEventosLiquidez: 'E.g. Inheritance ~€200,000 in 5 years. Company sale planned 2028...',
+    phMotivacion: 'Tell us in your own words what has led you to seek wealth advice at this time...',
+    phNotasRiesgo: 'Any special considerations about your risk tolerance or investment restrictions...',
+    phEdadJubilacion: 'E.g. 55',
+    phPatrimonioObjetivo: 'E.g. 2000000',
+    phInmuebleDesc: 'E.g. Primary residence London',
+    phFinancieroDesc: 'E.g. Investment portfolio Fidelity',
+    phHipotecaDesc: 'E.g. Primary residence mortgage',
+    phPrestamoDesc: 'E.g. Car loan',
+    phDesc: 'Description...'
+  }
+};
+
+/* ═══════════════════════════════════════════════════════
+   COUNTRIES
+═══════════════════════════════════════════════════════ */
+const COUNTRY_ES = ["Afganistán","Albania","Alemania","Andorra","Angola","Antigua y Barbuda","Arabia Saudita","Argelia","Argentina","Armenia","Australia","Austria","Azerbaiyán","Bahamas","Bangladés","Barbados","Baréin","Bélgica","Belice","Benín","Bielorrusia","Bolivia","Bosnia y Herzegovina","Botsuana","Brasil","Brunéi","Bulgaria","Burkina Faso","Burundi","Bután","Cabo Verde","Camboya","Camerún","Canadá","Catar","Chad","Chile","China","Chipre","Colombia","Comoras","Congo","Congo (Rep. Democrática)","Corea del Norte","Corea del Sur","Costa de Marfil","Costa Rica","Croacia","Cuba","Dinamarca","Dominica","Ecuador","Egipto","El Salvador","Emiratos Árabes Unidos","Eritrea","Eslovaquia","Eslovenia","España","Estados Unidos","Estonia","Etiopía","Filipinas","Finlandia","Fiyi","Francia","Gabón","Gambia","Georgia","Ghana","Granada","Grecia","Guatemala","Guinea","Guinea Ecuatorial","Guinea-Bisáu","Guyana","Haití","Honduras","Hungría","India","Indonesia","Irak","Irán","Irlanda","Islandia","Islas Marshall","Islas Salomón","Israel","Italia","Jamaica","Japón","Jordania","Kazajistán","Kenia","Kirguistán","Kiribati","Kuwait","Laos","Lesoto","Letonia","Líbano","Liberia","Libia","Liechtenstein","Lituania","Luxemburgo","Macedonia del Norte","Madagascar","Malasia","Malaui","Maldivas","Malí","Malta","Marruecos","Mauritania","Mauricio","México","Micronesia","Moldavia","Mónaco","Mongolia","Montenegro","Mozambique","Myanmar","Namibia","Nauru","Nepal","Nicaragua","Níger","Nigeria","Noruega","Nueva Zelanda","Omán","Países Bajos","Pakistán","Palaos","Panamá","Papúa Nueva Guinea","Paraguay","Perú","Polonia","Portugal","Reino Unido","Rep. Centroafricana","Rep. Checa","Rep. Dominicana","Ruanda","Rumanía","Rusia","Samoa","San Cristóbal y Nieves","San Marino","San Vicente y las Granadinas","Santa Lucía","Santo Tomé y Príncipe","Senegal","Serbia","Seychelles","Sierra Leona","Singapur","Siria","Somalia","Sri Lanka","Sudáfrica","Sudán","Sudán del Sur","Suecia","Suiza","Surinam","Tailandia","Tanzania","Tayikistán","Timor Oriental","Togo","Tonga","Trinidad y Tobago","Túnez","Turkmenistán","Turquía","Tuvalu","Ucrania","Uganda","Uruguay","Uzbekistán","Vanuatu","Venezuela","Vietnam","Yemen","Yibuti","Zambia","Zimbabue"];
+const COUNTRY_EN = ["Afghanistan","Albania","Germany","Andorra","Angola","Antigua and Barbuda","Saudi Arabia","Algeria","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bangladesh","Barbados","Bahrain","Belgium","Belize","Benin","Belarus","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Bhutan","Cape Verde","Cambodia","Cameroon","Canada","Qatar","Chad","Chile","China","Cyprus","Colombia","Comoros","Republic of the Congo","DR Congo","North Korea","South Korea","Côte d'Ivoire","Costa Rica","Croatia","Cuba","Denmark","Dominica","Ecuador","Egypt","El Salvador","United Arab Emirates","Eritrea","Slovakia","Slovenia","Spain","United States","Estonia","Ethiopia","Philippines","Finland","Fiji","France","Gabon","Gambia","Georgia","Ghana","Grenada","Greece","Guatemala","Guinea","Equatorial Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","India","Indonesia","Iraq","Iran","Ireland","Iceland","Marshall Islands","Solomon Islands","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kyrgyzstan","Kiribati","Kuwait","Laos","Lesotho","Latvia","Lebanon","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","North Macedonia","Madagascar","Malaysia","Malawi","Maldives","Mali","Malta","Morocco","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Mozambique","Myanmar","Namibia","Nauru","Nepal","Nicaragua","Niger","Nigeria","Norway","New Zealand","Oman","Netherlands","Pakistan","Palau","Panama","Papua New Guinea","Paraguay","Peru","Poland","Portugal","United Kingdom","Central African Republic","Czech Republic","Dominican Republic","Rwanda","Romania","Russia","Samoa","Saint Kitts and Nevis","San Marino","Saint Vincent and the Grenadines","Saint Lucia","São Tomé and Príncipe","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Syria","Somalia","Sri Lanka","South Africa","Sudan","South Sudan","Sweden","Switzerland","Suriname","Thailand","Tanzania","Tajikistan","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkmenistan","Turkey","Tuvalu","Ukraine","Uganda","Uruguay","Uzbekistan","Vanuatu","Venezuela","Vietnam","Yemen","Djibouti","Zambia","Zimbabwe"];
+
+function populateCountries(){
+  const sel = document.getElementById('pais');
+  const currentVal = sel.value;
+  // Build paired array and sort by display name
+  const paired = COUNTRY_EN.map((en, i) => ({ en, display: lang === 'es' ? COUNTRY_ES[i] : COUNTRY_EN[i] }));
+  paired.sort((a,b) => new Intl.Collator(lang).compare(a.display, b.display));
+  // Clear all except first placeholder
+  while(sel.options.length > 1) sel.remove(1);
+  sel.options[0].textContent = T[lang].phPais;
+  paired.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.en;
+    opt.textContent = p.display;
+    sel.appendChild(opt);
+  });
+  if(currentVal) sel.value = currentVal;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LANGUAGE
+═══════════════════════════════════════════════════════ */
+let lang = 'es';
+
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l;
+  document.getElementById('btnLangES').classList.toggle('active', l === 'es');
+  document.getElementById('btnLangEN').classList.toggle('active', l === 'en');
+  applyLang();
+  savePrefs();
+}
+
+function applyLang(){
+  const t = T[lang];
+  document.title = t.pageTitle;
+  // textContent
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(t[key] !== undefined) el.textContent = t[key];
+  });
+  // innerHTML
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if(t[key] !== undefined) el.innerHTML = t[key];
+  });
+  // placeholder
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if(t[key] !== undefined) el.placeholder = t[key];
+  });
+  // selects
+  document.querySelectorAll('[data-i18n-sel]').forEach(el => {
+    const key = el.getAttribute('data-i18n-sel');
+    const opts = t[key];
+    if(!opts) return;
+    const currentVal = el.value;
+    while(el.options.length > 1) el.remove(1);
+    if(el.options.length === 0){
+      const ph = document.createElement('option');
+      ph.value = ''; el.prepend(ph);
+    }
+    opts.forEach(([val, label]) => {
+      const o = document.createElement('option');
+      o.value = val; o.textContent = label;
+      el.appendChild(o);
+    });
+    if(currentVal) el.value = currentVal;
+  });
+  // countries
+  populateCountries();
+  // dynamic row cats
+  updateAllRowCats();
+  // legal section
+  document.getElementById('legalContent').innerHTML = buildLegalHTML();
+  // caida reaction label
+  updateCaidaLabel(document.getElementById('toleranciaCaida').value);
+}
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+let currentStep = 1;
+let selectedRisk = '';
+let autosaveEnabled = false;
+const TOTAL = 7;
+const LS_KEY = 'hofcare_onboarding_v2';
+const PREFS_KEY = 'hofcare_prefs';
+
+/* ═══════════════════════════════════════════════════════
+   PREFS (lang + autosave consent — non-sensitive)
+═══════════════════════════════════════════════════════ */
+function savePrefs(){
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify({lang, autosaveConsent: autosaveEnabled})); } catch(e){}
+}
+
+function loadPrefs(){
+  try {
+    const p = JSON.parse(localStorage.getItem(PREFS_KEY) || 'null');
+    if(p){
+      if(p.lang === 'es' || p.lang === 'en') lang = p.lang;
+      if(p.autosaveConsent){
+        autosaveEnabled = true;
+        const cb = document.getElementById('autosaveConsent');
+        if(cb) cb.checked = true;
+      }
+    }
+  } catch(e){}
+}
+
+/* ═══════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════ */
+function showStep(n){
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  currentStep = n;
+  updateProgress(n);
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(n === 7) buildSummary();
+  schedSave();
+}
+
+function nextStep(from){
+  if(!validateStep(from)) return;
+  showStep(from + 1);
+}
+
+function prevStep(from){
+  if(from <= 1) return;
+  showStep(from - 1);
+}
+
+function goToStep(n){
+  if(n < currentStep) showStep(n);
+}
+
+function updateProgress(n){
+  document.querySelectorAll('.progress-step').forEach((s,i) => {
+    const sn = i + 1;
+    s.classList.remove('active','done');
+    if(sn === n) s.classList.add('active');
+    else if(sn < n) s.classList.add('done');
+  });
+  const pct = ((n-1)/(TOTAL-1))*100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+/* ═══════════════════════════════════════════════════════
+   VALIDATION
+═══════════════════════════════════════════════════════ */
+const VALIDATION = {
+  1: [
+    {id:'nombre', type:'text'},
+    {id:'email', type:'email'},
+    {id:'edad', type:'age'},
+    {id:'pais', type:'select'},
+    {id:'estadoCivil', type:'select'},
+    {id:'situacionLaboral', type:'select'},
+    {id:'gdprConsent', type:'checkbox', errId:'err-gdpr', errClass:'gdpr-error'}
+  ],
+  4: [
+    {id:'salario', type:'number0'},
+    {id:'manutención', type:'number0'}
+  ],
+  5: [
+    {id:'_objectives', type:'objectives', errId:'err-objectives'},
+    {id:'horizonte', type:'select'},
+    {id:'motivacion', type:'text'}
+  ],
+  6: [
+    {id:'_risk', type:'risk', errId:'err-risk', errClass:'risk-error-msg'},
+    {id:'experiencia', type:'select'},
+    {id:'instrumentos', type:'select'}
+  ]
+};
+
+function checkRule(rule){
+  if(rule.type === 'objectives') return getSelectedObjectives().length > 0;
+  if(rule.type === 'risk') return !!selectedRisk;
+  const el = document.getElementById(rule.id);
+  if(!el) return true;
+  const val = el.value.trim();
+  switch(rule.type){
+    case 'text':   return val !== '';
+    case 'select': return val !== '';
+    case 'email':  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+    case 'age':    { const a = parseInt(val); return val !== '' && a >= 18 && a <= 99; }
+    case 'number0':return val !== '';
+    case 'checkbox': return el.checked;
+    default: return val !== '';
+  }
+}
+
+function validateStep(n){
+  const rules = VALIDATION[n];
+  if(!rules) return true;
+  let firstFail = null;
+  let allOk = true;
+
+  rules.forEach(rule => {
+    const ok = checkRule(rule);
+    const errId = rule.errId || ('err-' + rule.id);
+    const errClass = rule.errClass || 'err-msg';
+    const errEl = document.getElementById(errId);
+
+    if(!ok){
+      if(errEl) errEl.classList.add('show');
+      if(rule.type !== 'objectives' && rule.type !== 'risk' && rule.type !== 'checkbox'){
+        const el = document.getElementById(rule.id);
+        if(el) el.classList.add('field-error');
+        if(!firstFail && el) firstFail = el;
+      } else if(!firstFail && errEl){
+        firstFail = errEl;
+      }
+      if(allOk) allOk = false;
+    } else {
+      if(errEl) errEl.classList.remove('show');
+      if(rule.type !== 'objectives' && rule.type !== 'risk' && rule.type !== 'checkbox'){
+        const el = document.getElementById(rule.id);
+        if(el) el.classList.remove('field-error');
+      }
+    }
+  });
+
+  if(firstFail) setTimeout(() => firstFail.scrollIntoView({behavior:'smooth', block:'center'}), 50);
+  return allOk;
+}
+
+// Clear error on user input
+document.addEventListener('input', e => {
+  if(e.target.matches('input,select,textarea')){
+    e.target.classList.remove('field-error');
+    const errEl = document.getElementById('err-'+e.target.id);
+    if(errEl) errEl.classList.remove('show');
+  }
+  schedSave();
+});
+document.addEventListener('change', e => {
+  if(e.target.id === 'gdprConsent'){
+    const errEl = document.getElementById('err-gdpr');
+    if(errEl) errEl.classList.remove('show');
+  }
+  schedSave();
+});
+
+/* ═══════════════════════════════════════════════════════
+   AUTOSAVE
+═══════════════════════════════════════════════════════ */
+function onAutosaveConsentChange(){
+  const cb = document.getElementById('autosaveConsent');
+  autosaveEnabled = cb.checked;
+  savePrefs();
+  updateClearBtn();
+  if(autosaveEnabled){
+    checkRestore();
+    schedSave();
+  }
+}
+
+let saveTimer = null;
+function schedSave(){
+  if(!autosaveEnabled) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveProgress, 1200);
+}
+
+function saveProgress(){
+  if(!autosaveEnabled) return;
+  try {
+    const state = {
+      version: 2,
+      step: currentStep,
+      risk: selectedRisk,
+      objectives: getSelectedObjectives(),
+      sliders: {
+        toleranciaCaida: document.getElementById('toleranciaCaida').value,
+        liquidezNecesaria: document.getElementById('liquidezNecesaria').value
+      },
+      fields: {},
+      rows: {
+        inmuebles: getRowsData('inmuebles-rows'),
+        financiero: getRowsData('financiero-rows'),
+        hipoteca: getRowsData('hipoteca-rows'),
+        prestamo: getRowsData('prestamo-rows')
+      }
+    };
+    document.querySelectorAll('input[id],select[id],textarea[id]').forEach(el => {
+      if(el.type === 'range') return;
+      state.fields[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+    });
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    showToast(T[lang].toastSaved);
+    updateClearBtn();
+  } catch(e){}
+}
+
+function clearSaved(){
+  localStorage.removeItem(LS_KEY);
+  hideBanner();
+  updateClearBtn();
+  showToast(T[lang].toastCleared);
+}
+
+function updateClearBtn(){
+  const btn = document.getElementById('btnClearSave');
+  if(!btn) return;
+  const hasData = autosaveEnabled && !!localStorage.getItem(LS_KEY);
+  btn.classList.toggle('visible', hasData);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  const span = document.getElementById('toastMsg');
+  if(span) span.textContent = msg || T[lang].toastSaved;
+  t.classList.add('visible');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('visible'), 2200);
+}
+
+function checkRestore(){
+  if(!autosaveEnabled) return;
+  try {
+    const saved = localStorage.getItem(LS_KEY);
+    if(!saved) return;
+    const state = JSON.parse(saved);
+    if(state && state.version === 2 && state.fields && Object.keys(state.fields).length > 0){
+      showBanner();
+    }
+  } catch(e){}
+}
+
+function showBanner(){
+  document.getElementById('restoreBanner').classList.add('visible');
+}
+
+function hideBanner(){
+  document.getElementById('restoreBanner').classList.remove('visible');
+}
+
+function dismissRestore(){
+  hideBanner();
+}
+
+function restoreProgress(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_KEY));
+    if(!saved || saved.version !== 2) return;
+    // restore fields
+    Object.entries(saved.fields || {}).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      if(el.type === 'checkbox') el.checked = val;
+      else el.value = val;
+    });
+    // restore sliders
+    if(saved.sliders){
+      const tc = document.getElementById('toleranciaCaida');
+      const ln = document.getElementById('liquidezNecesaria');
+      if(tc && saved.sliders.toleranciaCaida !== undefined){ tc.value = saved.sliders.toleranciaCaida; updateCaidaLabel(tc.value); }
+      if(ln && saved.sliders.liquidezNecesaria !== undefined){ ln.value = saved.sliders.liquidezNecesaria; updateLiquidezLabel(ln.value); }
+    }
+    // restore risk
+    if(saved.risk){
+      selectedRisk = saved.risk;
+      document.querySelectorAll('.risk-card').forEach(c => {
+        c.classList.toggle('selected', c.querySelector('input[type="radio"]').value === saved.risk);
+      });
+    }
+    // restore objectives
+    if(saved.objectives && saved.objectives.length){
+      document.querySelectorAll('#objTagsContainer .obj-tag').forEach(tag => {
+        const inp = tag.querySelector('input[type="checkbox"]');
+        if(inp) tag.classList.toggle('selected', saved.objectives.includes(inp.value));
+      });
+    }
+    // restore dynamic rows
+    const rowConfigs = [
+      ['inmuebles-rows','inmueble', saved.rows && saved.rows.inmuebles],
+      ['financiero-rows','financiero', saved.rows && saved.rows.financiero],
+      ['hipoteca-rows','hipoteca', saved.rows && saved.rows.hipoteca],
+      ['prestamo-rows','prestamo', saved.rows && saved.rows.prestamo]
+    ];
+    rowConfigs.forEach(([containerId, type, data]) => {
+      if(!data || !data.length) return;
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      data.forEach(r => {
+        addRow(containerId, type);
+        const rows = container.querySelectorAll('.asset-row');
+        const last = rows[rows.length-1];
+        if(last){
+          last.querySelector('.asset-desc').value = r.descripcion || '';
+          last.querySelector('.asset-valor').value = r.valor || '';
+          if(last.querySelector('.asset-cat')) last.querySelector('.asset-cat').value = r.categoria || '';
+        }
+      });
+    });
+    showStep(Math.min(saved.step || 1, 7));
+    dismissRestore();
+  } catch(e){ console.warn('Restore error', e); dismissRestore(); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   DYNAMIC ROWS
+═══════════════════════════════════════════════════════ */
+function getCatOptions(type){
+  const t = T[lang];
+  const map = {
+    inmueble: t.optsImmuebleCat,
+    financiero: t.optsFinancieroCat,
+    hipoteca: t.optsHipotecaCat,
+    prestamo: t.optsPrestamoCat
+  };
+  return (map[type] || []).map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+}
+
+function getPlaceholder(type){
+  const t = T[lang];
+  const map = { inmueble: t.phInmuebleDesc, financiero: t.phFinancieroDesc, hipoteca: t.phHipotecaDesc, prestamo: t.phPrestamoDesc };
+  return map[type] || t.phDesc;
+}
+
+function addRow(containerId, type){
+  const container = document.getElementById(containerId);
+  const div = document.createElement('div');
+  div.className = 'asset-row';
+  div.innerHTML = `<input type="text" placeholder="${getPlaceholder(type)}" class="asset-desc"/><div class="currency-wrap"><span class="currency-sym">€</span><input type="number" placeholder="0" class="asset-valor"/></div><select class="asset-cat">${getCatOptions(type)}</select><button class="btn-remove" onclick="removeRow(this)" title="Eliminar">×</button>`;
+  container.appendChild(div);
+  div.querySelector('.asset-desc').addEventListener('input', schedSave);
+  div.querySelector('.asset-valor').addEventListener('input', schedSave);
+}
+
+function removeRow(btn){
+  const row = btn.closest('.asset-row');
+  const container = row.parentElement;
+  if(container.querySelectorAll('.asset-row').length > 1){ row.remove(); schedSave(); }
+}
+
+function getRowsData(containerId){
+  return [...document.querySelectorAll('#'+containerId+' .asset-row')].map(row => ({
+    descripcion: row.querySelector('.asset-desc') ? row.querySelector('.asset-desc').value : '',
+    valor: parseFloat(row.querySelector('.asset-valor') ? row.querySelector('.asset-valor').value : 0) || 0,
+    categoria: row.querySelector('.asset-cat') ? row.querySelector('.asset-cat').value : ''
+  })).filter(r => r.descripcion || r.valor);
+}
+
+function updateAllRowCats(){
+  // Update category selects in each container
+  const containers = [
+    {id:'inmuebles-rows', type:'inmueble'},
+    {id:'financiero-rows', type:'financiero'},
+    {id:'hipoteca-rows', type:'hipoteca'},
+    {id:'prestamo-rows', type:'prestamo'}
+  ];
+  containers.forEach(({id, type}) => {
+    document.querySelectorAll('#'+id+' .asset-cat').forEach(sel => {
+      const currentVal = sel.value;
+      sel.innerHTML = getCatOptions(type);
+      if(currentVal) sel.value = currentVal;
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   OBJECTIVES & RISK
+═══════════════════════════════════════════════════════ */
+// Delegate to checkbox change — avoids double-fire caused by label+checkbox click bubbling
+document.getElementById('objTagsContainer').addEventListener('change', function(e){
+  if(e.target.type === 'checkbox'){
+    const tag = e.target.closest('.obj-tag');
+    if(tag) tag.classList.toggle('selected', e.target.checked);
+    const errEl = document.getElementById('err-objectives');
+    if(errEl) errEl.classList.remove('show');
+    schedSave();
+  }
+});
+
+function getSelectedObjectives(){
+  return [...document.querySelectorAll('#objTagsContainer input[type="checkbox"]:checked')].map(inp => inp.value);
+}
+
+function selectRisk(el, val){
+  document.querySelectorAll('.risk-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedRisk = val;
+  const errEl = document.getElementById('err-risk');
+  if(errEl) errEl.classList.remove('show');
+  schedSave();
+}
+
+/* ═══════════════════════════════════════════════════════
+   SLIDERS
+═══════════════════════════════════════════════════════ */
+function updateCaidaLabel(v){
+  const pcts = ['','10%','12%','15%','25%','35%'];
+  const lbl = document.getElementById('caida-label');
+  if(lbl) lbl.textContent = pcts[+v] || '15%';
+  const react = document.getElementById('caida-reaction');
+  if(react) react.textContent = T[lang].caidaReactions[+v] || '';
+}
+
+function updateLiquidezLabel(v){
+  const el = document.getElementById('liquidez-value');
+  if(el) el.textContent = v + '%';
+}
+
+/* ═══════════════════════════════════════════════════════
+   LEGAL HTML
+═══════════════════════════════════════════════════════ */
+function buildLegalHTML(){
+  const t = T[lang];
+  return `<p>${t.legalResponsable}</p><p>${t.legalFinalidad}</p><p>${t.legalBase}</p><p>${t.legalConservacion}</p><p>${t.legalDestinatarios}</p><p>${t.legalDerechos}</p><p>${t.legalContacto}</p>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   DATA COLLECTION
+═══════════════════════════════════════════════════════ */
+const fv = id => { const el = document.getElementById(id); return el ? el.value || '' : ''; };
+const fn = id => { const el = document.getElementById(id); return parseFloat(el ? el.value : 0) || 0; };
+
+function collectData(){
+  const inmuebles = getRowsData('inmuebles-rows');
+  const financieros = getRowsData('financiero-rows');
+  const hipotecas = getRowsData('hipoteca-rows');
+  const prestamos = getRowsData('prestamo-rows');
+  const totalActivos = inmuebles.reduce((s,r)=>s+r.valor,0) + financieros.reduce((s,r)=>s+r.valor,0) + fn('efectivo') + fn('otrosLiquidos') + fn('negocio') + fn('vehiculos');
+  const totalPasivos = hipotecas.reduce((s,r)=>s+r.valor,0) + prestamos.reduce((s,r)=>s+r.valor,0);
+  const ingresos = fn('salario') + fn('rentas') + fn('dividendos') + fn('otrosIngresos');
+  const gastos = fn('cuotaHipoteca') + fn('cuotaPrestamos') + fn('alquilerGasto') + fn('seguros') + fn('manutención') + fn('ocio') + fn('otrosGastos');
+  const caidaVal = parseInt(fv('toleranciaCaida')) || 3;
+  return {
+    meta:{ fecha: new Date().toISOString().slice(0,10), version:'HofCare Onboarding v3.0' },
+    personal:{ nombre:fv('nombre'), email:fv('email'), edad:fv('edad'), pais:fv('pais'), estadoCivil:fv('estadoCivil'), hijos:fv('hijos'), situacionLaboral:fv('situacionLaboral'), sector:fv('sector'), comoConocio:fv('comoConocio') },
+    activos:{ inmuebles, financieros, efectivo:fn('efectivo'), otrosLiquidos:fn('otrosLiquidos'), negocio:fn('negocio'), vehiculos:fn('vehiculos'), total: totalActivos },
+    pasivos:{ hipotecas, prestamos, avales:fv('avales'), total: totalPasivos },
+    patrimonioNeto: totalActivos - totalPasivos,
+    flujos:{ ingresos:{ salario:fn('salario'), rentas:fn('rentas'), dividendos:fn('dividendos'), otros:fn('otrosIngresos'), total:ingresos }, gastos:{ hipoteca:fn('cuotaHipoteca'), prestamos:fn('cuotaPrestamos'), alquiler:fn('alquilerGasto'), seguros:fn('seguros'), manutencion:fn('manutención'), ocio:fn('ocio'), otros:fn('otrosGastos'), total:gastos }, flujoNeto: ingresos - gastos, ahorroDeclarado:fn('ahorroMensual'), eventosLiquidez:fv('eventosLiquidez') },
+    objetivos:{ seleccionados:getSelectedObjectives(), horizonte:fv('horizonte'), edadJubilacion:fv('edadJubilacion'), patrimonioObjetivo:fn('patrimonioObjetivo'), motivacion:fv('motivacion') },
+    perfilRiesgo:{ tipo:selectedRisk, experiencia:fv('experiencia'), instrumentos:fv('instrumentos'), reaccionCaida:T[lang].caidaReactions[caidaVal], liquidezNecesaria:(fv('liquidezNecesaria')||'20')+'%', notas:fv('notasRiesgo') },
+    rgpd:{ consentimiento: document.getElementById('gdprConsent') ? document.getElementById('gdprConsent').checked : false, fecha: new Date().toISOString() }
+  };
+}
+
+/* ═══════════════════════════════════════════════════════
+   SUMMARY
+═══════════════════════════════════════════════════════ */
+const fmt = n => '€' + Number(n||0).toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:0});
+
+function buildSummary(){
+  const d = collectData();
+  const t = T[lang];
+
+  document.querySelector('#kpi-activos .kpi-value').textContent = fmt(d.activos.total);
+  document.querySelector('#kpi-pasivos .kpi-value').textContent = fmt(d.pasivos.total);
+  const knEl = document.querySelector('#kpi-neto .kpi-value');
+  knEl.textContent = fmt(d.patrimonioNeto);
+  document.getElementById('kpi-neto').className = 'summary-kpi ' + (d.patrimonioNeto >= 0 ? 'positive' : 'negative');
+
+  function fillTable(id, rows){
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = rows.filter(r=>r[1]).map(([k,v])=>`<tr><td>${k}</td><td>${v||'—'}</td></tr>`).join('');
+  }
+
+  fillTable('summary-personal',[
+    [t.tNombre, d.personal.nombre],
+    [t.tEmail, d.personal.email],
+    [t.tEdad, d.personal.edad ? d.personal.edad + t.sumAnos : ''],
+    [t.tPais, d.personal.pais],
+    [t.tEstadoCivil, t.sumEstCivil[d.personal.estadoCivil] || d.personal.estadoCivil],
+    [t.tHijos, d.personal.hijos === '0' ? t.sumSinHijos : d.personal.hijos],
+    [t.tSitLaboral, t.sumSitLab[d.personal.situacionLaboral] || d.personal.situacionLaboral],
+    [t.tSector, d.personal.sector]
+  ]);
+
+  fillTable('summary-activos',[
+    [t.tInmuebles, d.activos.inmuebles.length ? d.activos.inmuebles.map(r=>`${r.descripcion}: ${fmt(r.valor)}`).join(' · ') : null],
+    [t.tFinancieros, d.activos.financieros.length ? d.activos.financieros.map(r=>`${r.descripcion}: ${fmt(r.valor)}`).join(' · ') : null],
+    [t.tEfectivo, d.activos.efectivo ? fmt(d.activos.efectivo) : null],
+    [t.tOtrosLiq, d.activos.otrosLiquidos ? fmt(d.activos.otrosLiquidos) : null],
+    [t.tNegocio, d.activos.negocio ? fmt(d.activos.negocio) : null],
+    [t.tVehiculos, d.activos.vehiculos ? fmt(d.activos.vehiculos) : null],
+    ['<strong>'+t.tTotalActivos+'</strong>', '<strong>'+fmt(d.activos.total)+'</strong>']
+  ]);
+
+  fillTable('summary-pasivos',[
+    [t.tHipotecas, d.pasivos.hipotecas.length ? d.pasivos.hipotecas.map(r=>`${r.descripcion}: ${fmt(r.valor)}`).join(' · ') : null],
+    [t.tPrestamos, d.pasivos.prestamos.length ? d.pasivos.prestamos.map(r=>`${r.descripcion}: ${fmt(r.valor)}`).join(' · ') : null],
+    [t.tAvales, d.pasivos.avales || null],
+    ['<strong>'+t.tTotalPasivos+'</strong>', '<strong>'+fmt(d.pasivos.total)+'</strong>'],
+    ['<strong>'+t.tPatrimNeto+'</strong>', '<strong>'+fmt(d.patrimonioNeto)+'</strong>']
+  ]);
+
+  const tasaAhorro = d.flujos.ingresos.total > 0 ? Math.round((d.flujos.flujoNeto / d.flujos.ingresos.total)*100) + '%' : '—';
+  fillTable('summary-flujos',[
+    [t.tIngresosTotal, fmt(d.flujos.ingresos.total)],
+    [t.tGastosTotal, fmt(d.flujos.gastos.total)],
+    [t.tFlujoNeto, fmt(d.flujos.flujoNeto)],
+    [t.tAhorroDecl, d.flujos.ahorroDeclarado ? fmt(d.flujos.ahorroDeclarado) : null],
+    [t.tTasaAhorro, tasaAhorro],
+    [t.tEventos, d.flujos.eventosLiquidez || null]
+  ]);
+
+  const objLabels = {
+    jubilacion: t.objJubilacion, inmueble: t.objInmueble, educacion: t.objEducacion,
+    optimizacion: t.objOptimizacion, renta: t.objRenta, negocio: t.objNegocio,
+    herencia: t.objHerencia, internacional: t.objInternacional, deuda: t.objDeuda, liquidez: t.objLiquidez
+  };
+  const objStr = d.objetivos.seleccionados.map(k => objLabels[k] || k).join(', ');
+
+  fillTable('summary-objetivos',[
+    [t.tObjetivosSelec, objStr || null],
+    [t.tHorizonte, t.sumHorizonte[d.objetivos.horizonte] || d.objetivos.horizonte || null],
+    [t.tEdadIF, d.objetivos.edadJubilacion ? d.objetivos.edadJubilacion + t.sumAnos : null],
+    [t.tPatrimObjetivo, d.objetivos.patrimonioObjetivo ? fmt(d.objetivos.patrimonioObjetivo) : null],
+    [t.tMotivacion, d.objetivos.motivacion || null]
+  ]);
+
+  fillTable('summary-riesgo',[
+    [t.tPerfilInversor, t.sumRisk[d.perfilRiesgo.tipo] || d.perfilRiesgo.tipo || null],
+    [t.tExperiencia, d.perfilRiesgo.experiencia || null],
+    [t.tInstrumentos, d.perfilRiesgo.instrumentos || null],
+    [t.tReaccionCaida, d.perfilRiesgo.reaccionCaida || null],
+    [t.tLiquidezNec, d.perfilRiesgo.liquidezNecesaria],
+    [t.tNotas, d.perfilRiesgo.notas || null]
+  ]);
+}
+
+/* ═══════════════════════════════════════════════════════
+   COPY JSON
+═══════════════════════════════════════════════════════ */
+function copyJSON(){
+  const text = JSON.stringify(collectData(), null, 2);
+  const banner = document.getElementById('copySuccess');
+  const show = () => { banner.classList.add('visible'); setTimeout(()=>banner.classList.remove('visible'), 3500); };
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(show).catch(fallback);
+  } else { fallback(); }
+  function fallback(){
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try{ document.execCommand('copy'); show(); }catch(e){}
+    document.body.removeChild(ta);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   PROGRESS STEP CLICK
+═══════════════════════════════════════════════════════ */
+document.querySelectorAll('.progress-step').forEach(s => {
+  s.addEventListener('click', () => {
+    const n = parseInt(s.getAttribute('data-step'));
+    if(s.classList.contains('done')) goToStep(n);
+  });
+});
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+loadPrefs();
+setLang(lang);          // applies T, populates selects, countries, legal
+updateProgress(1);
+updateAllRowCats();     // populate static row selects
+if(autosaveEnabled) checkRestore();
+updateCaidaLabel(3);
+updateClearBtn();
+
+/* ═══════════════════════════════════════════════════════
+   FORMSPREE SUBMIT
+   ─────────────────────────────────────────────────────
+   1. Crea una cuenta gratis en formspree.io con hofcarecapital@gmail.com
+   2. Crea un nuevo formulario → copia el ID (8 chars después de /f/)
+   3. Reemplaza XXXXXXXX por ese ID en la línea de abajo
+═══════════════════════════════════════════════════════ */
+const FORMSPREE_ID = 'mgonlpgk'; // ← REEMPLAZA CON TU ID DE FORMSPREE
+
+async function submitToHofCare(){
+  const btn     = document.getElementById('btnSubmit');
+  const txtBtn  = document.getElementById('btnSubmitText');
+  const spinner = document.getElementById('btnSubmitSpinner');
+  const okBox   = document.getElementById('submitSuccess');
+  const errBox  = document.getElementById('submitError');
+
+  // Si el endpoint no está configurado, avisa
+  if(FORMSPREE_ID === 'XXXXXXXX'){
+    errBox.innerHTML = '⚠️ Formulario aún no configurado. Configura tu Formspree ID en onboarding.html. <br/>Mientras tanto, copia el JSON y envíalo a <strong>hofcarecapital@gmail.com</strong>';
+    errBox.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  txtBtn.style.display = 'none';
+  spinner.style.display = 'inline';
+  okBox.style.display  = 'none';
+  errBox.style.display = 'none';
+
+  try {
+    const data = collectData();
+    // Formspree acepta JSON flat — aplanamos los datos clave
+    const payload = {
+      _subject: `[HofCare] Nuevo onboarding — ${data.personal.nombre || 'Sin nombre'} (${data.personal.email || '—'})`,
+      nombre:          data.personal.nombre,
+      email:           data.personal.email,
+      edad:            data.personal.edad,
+      pais:            data.personal.pais,
+      estado_civil:    data.personal.estadoCivil,
+      situacion_lab:   data.personal.situacionLaboral,
+      sector:          data.personal.sector || '—',
+      patrimonio_neto: data.patrimonioNeto,
+      total_activos:   data.activos.total,
+      total_pasivos:   data.pasivos.total,
+      ingresos_mes:    data.flujos.ingresos.total,
+      gastos_mes:      data.flujos.gastos.total,
+      flujo_neto_mes:  data.flujos.flujoNeto,
+      objetivos:       data.objetivos.seleccionados.join(', '),
+      horizonte:       data.objetivos.horizonte,
+      motivacion:      data.objetivos.motivacion,
+      perfil_riesgo:   data.perfilRiesgo.tipo,
+      experiencia:     data.perfilRiesgo.experiencia,
+      liquidez_nec:    data.perfilRiesgo.liquidezNecesaria,
+      consentimiento:  data.rgpd.consentimiento ? 'Sí' : 'No',
+      datos_completos_json: JSON.stringify(data, null, 2)
+    };
+
+    const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if(res.ok){
+      okBox.querySelector('span').textContent = data.personal.email || 'hofcarecapital@gmail.com';
+      okBox.style.display = 'block';
+      btn.style.display   = 'none'; // ocultar botón tras envío exitoso
+      // Limpiar localStorage tras envío exitoso
+      try{ localStorage.removeItem('hofcare_onboarding_v1'); }catch(e){}
+    } else {
+      throw new Error('Respuesta no OK');
+    }
+  } catch(err){
+    errBox.innerHTML = '❌ Error al enviar. Por favor, escríbenos a <strong>hofcarecapital@gmail.com</strong> con tus datos.';
+    errBox.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    txtBtn.style.display = 'inline';
+    spinner.style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>
